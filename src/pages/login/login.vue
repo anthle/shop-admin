@@ -1,14 +1,49 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import type { FormInstance, FormRules } from 'element-plus'
+import { reactive, ref } from 'vue'
+import { useLoginStore } from '@/stores/login'
+import { ElNotification } from 'element-plus'
 
-// do not use same name with ref
+const { loginAction } = useLoginStore()
+
 const form = reactive({
 	name: '',
 	password: ''
 })
 
-const onSubmit = () => {
-	console.log(form)
+// 表单自定义规则
+const rules = reactive<FormRules>({
+	name: [
+		{
+			required: true,
+			message: '请输入用户名',
+			trigger: 'blur'
+		}
+	],
+	password: [
+		{
+			required: true,
+			message: '请输入密码',
+			trigger: 'blur'
+		}
+	]
+})
+
+const formRef = ref<FormInstance>()
+
+const onSubmit = (formEl: FormInstance | undefined) => {
+	if (!formEl) return
+	formEl.validate((valid) => {
+		if (valid) {
+			loginAction(form.name, form.password)
+			ElNotification({
+				message: '登录成功',
+				type: 'success'
+			})
+		} else {
+			return false
+		}
+	})
 }
 </script>
 
@@ -27,21 +62,22 @@ const onSubmit = () => {
 				<span>账号密码登录</span>
 				<span class="h-[1px] w-16 bg-gray-200"></span>
 			</div>
-			<el-form :model="form" class="w-[250px]">
-				<el-form-item>
+
+			<el-form :model="form" class="w-[250px]" :rules="rules" ref="formRef">
+				<el-form-item prop="name">
 					<el-input v-model="form.name" placeholder="请输入用户名">
 						<template #prefix>
 							<IEpUser />
 						</template>
 					</el-input>
 				</el-form-item>
-				<el-form-item>
-					<el-input v-model="form.password" placeholder="请输入密码" type="password">
+				<el-form-item prop="password">
+					<el-input v-model="form.password" placeholder="请输入密码" type="password" show-password>
 						<template #prefix> <IEpLock /> </template
 					></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button class="w-[250px]" color="#626aef" round type="primary" @click="onSubmit()">登录</el-button>
+					<el-button class="w-[250px]" color="#626aef" round type="primary" @click="onSubmit(formRef)">登录</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>

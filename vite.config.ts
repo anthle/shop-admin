@@ -8,14 +8,23 @@ import IconsResolver from 'unplugin-icons/resolver'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import { createStyleImportPlugin, ElementPlusResolve } from 'vite-plugin-style-import'
 
 const pathSrc = path.resolve(__dirname, 'src')
 
 // https://vitejs.dev/config/
 export default defineConfig({
+	server: {
+		proxy: {
+			'/api': {
+				target: 'http://ceshi13.dishait.cn',
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/api/, '')
+			}
+		}
+	},
 	plugins: [
 		vue(),
-
 		AutoImport({
 			// Auto import functions from Vue, e.g. ref, reactive, toRef...
 			// 自动导入 Vue 相关函数，如：ref, reactive, toRef 等
@@ -27,7 +36,6 @@ export default defineConfig({
 
 			dts: path.resolve(pathSrc, 'auto-imports.d.ts')
 		}),
-
 		Components({
 			resolvers: [
 				// Auto register icon components
@@ -44,10 +52,22 @@ export default defineConfig({
 
 			dts: path.resolve(pathSrc, 'components.d.ts')
 		}),
-
 		Icons({
 			autoInstall: true,
 			compiler: 'vue3'
+		}),
+		// 自动添加element-plus的样式
+		createStyleImportPlugin({
+			resolves: [ElementPlusResolve()],
+			libs: [
+				{
+					libraryName: 'element-plus',
+					esModule: true,
+					resolveStyle: (name: string) => {
+						return `element-plus/theme-chalk/${name}.css`
+					}
+				}
+			]
 		})
 	],
 	resolve: {
