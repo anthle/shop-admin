@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { useCookies } from '@vueuse/integrations/useCookies'
+import { getToken } from '@/composables/auth'
+import { toast } from '@/composables/useEle'
 
 const instance = axios.create({
 	baseURL: '/api',
@@ -8,8 +9,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
 	(config) => {
-		const cookies = useCookies()
-		const token = cookies.get('admin-token')
+		const token = getToken()
 
 		if (config.headers && token) {
 			config.headers['token'] = token
@@ -28,11 +28,7 @@ instance.interceptors.response.use(
 		return data
 	},
 	(error) => {
-		ElNotification({
-			title: 'Error',
-			message: error.response.data.msg || '登录失败',
-			type: 'error'
-		})
+		toast(error.response.data.msg || '登录失败', 'error')
 		return Promise.reject(error)
 	}
 )

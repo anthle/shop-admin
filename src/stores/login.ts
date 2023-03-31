@@ -1,20 +1,31 @@
 import { defineStore } from 'pinia'
-import { login, getUserInfo } from '@/service'
-import { useCookies } from '@vueuse/integrations/useCookies'
+import { login, getUserInfo, logout } from '@/service'
 import router from '@/router'
+import { toast } from '@/composables/useEle'
+import { removeToken, setToken } from '@/composables/auth'
 
 export const useLoginStore = defineStore('login', {
-	state: () => ({}),
+	state: () => ({
+		userInfo: {}
+	}),
 	actions: {
 		async loginAction(username: string, password: string) {
 			const res = await login(username, password)
-			const cookies = useCookies()
-			cookies.set('admin-token', res.data.data.token)
-
-			const res1 = await getUserInfo()
-			console.log(res1)
+			toast('登录成功')
+			setToken(res.data.data.token)
 
 			router.push('/index')
+		},
+		async getUserInfoAction() {
+			const res = await getUserInfo()
+			this.userInfo = res.data.data
+		},
+		async logoutAction() {
+			await logout()
+			removeToken()
+			toast('退出登录成功')
+			this.userInfo = {}
+			router.push('/login')
 		}
 	}
 })

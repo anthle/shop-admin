@@ -2,10 +2,9 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { useLoginStore } from '@/stores/login'
-import { ElNotification } from 'element-plus'
 
-const { loginAction } = useLoginStore()
-
+const { loginAction, getUserInfoAction } = useLoginStore()
+const isLoading = ref(false)
 const form = reactive({
 	name: '',
 	password: ''
@@ -32,18 +31,26 @@ const rules = reactive<FormRules>({
 const formRef = ref<FormInstance>()
 
 const onSubmit = (formEl: FormInstance | undefined) => {
+	isLoading.value = true
 	if (!formEl) return
 	formEl.validate((valid) => {
 		if (valid) {
 			loginAction(form.name, form.password)
-			ElNotification({
-				message: '登录成功',
-				type: 'success'
-			})
+				.then(() => {
+					getUserInfoAction()
+				})
+				.finally(() => {
+					isLoading.value = false
+				})
 		} else {
+			isLoading.value = false
 			return false
 		}
 	})
+}
+
+const enterSubmit = () => {
+	onSubmit(formRef.value)
 }
 </script>
 
@@ -72,12 +79,26 @@ const onSubmit = (formEl: FormInstance | undefined) => {
 					</el-input>
 				</el-form-item>
 				<el-form-item prop="password">
-					<el-input v-model="form.password" placeholder="请输入密码" type="password" show-password>
+					<el-input
+						v-model="form.password"
+						placeholder="请输入密码"
+						type="password"
+						show-password
+						@keyup.enter="enterSubmit"
+					>
 						<template #prefix> <IEpLock /> </template
 					></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button class="w-[250px]" color="#626aef" round type="primary" @click="onSubmit(formRef)">登录</el-button>
+					<el-button
+						class="w-[250px]"
+						color="#626aef"
+						round
+						:loading="isLoading"
+						type="primary"
+						@click="onSubmit(formRef)"
+						>登录</el-button
+					>
 				</el-form-item>
 			</el-form>
 		</el-col>

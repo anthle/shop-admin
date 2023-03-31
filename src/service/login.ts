@@ -10,3 +10,7 @@ export function login(username: string, password: string) {
 export function getUserInfo() {
 	return request.post('/admin/getinfo')
 }
+
+export function logout() {
+	return request.post('/admin/logout')
+}
