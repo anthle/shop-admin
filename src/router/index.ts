@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { getToken } from '@/composables/auth'
 import { toast } from '@/composables/useEle'
+import { useLoginStore } from '@/stores/login'
 
 const router = createRouter({
 	history: createWebHashHistory(),
@@ -18,12 +19,17 @@ const router = createRouter({
 			}
 		},
 		{
-			path: '/index',
-			name: 'index',
-			component: () => import('../pages/index/index.vue'),
-			meta: {
-				title: '首页'
-			}
+			path: '/',
+			component: () => import('../layout/admin.vue'),
+			children: [
+				{
+					path: 'index',
+					component: () => import('../pages/index/index.vue'),
+					meta: {
+						title: '首页'
+					}
+				}
+			]
 		},
 		{
 			path: '/:pathMatch(.*)*',
@@ -34,6 +40,7 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
 	const token = getToken()
+	const { loadlocalCacheAction } = useLoginStore()
 
 	if (to.path !== '/login' && !token) {
 		toast('请先登录', 'error')
@@ -44,8 +51,11 @@ router.beforeEach((to, from) => {
 		toast('您已登录', 'info')
 		return from.path
 	}
+
 	const title = to.meta.title
 	document.title = title
+
+	loadlocalCacheAction()
 })
 
 export default router

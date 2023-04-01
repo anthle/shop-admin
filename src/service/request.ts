@@ -2,6 +2,7 @@ import axios from 'axios'
 import { getToken } from '@/composables/auth'
 import { toast } from '@/composables/useEle'
 import { hideFullLoading, showFullLoading } from '@/composables/utils'
+import { useLoginStore } from '@/stores/login'
 
 const instance = axios.create({
 	baseURL: '/api',
@@ -32,8 +33,15 @@ instance.interceptors.response.use(
 		return data
 	},
 	(error) => {
+		const { logoutAction } = useLoginStore()
+		const msg = error.response.data.msg
+		if (msg === '非法token，请先登录！') {
+			logoutAction().finally(() => {
+				location.reload()
+			})
+		}
 		hideFullLoading()
-		toast(error.response.data.msg || '登录失败', 'error')
+		toast(msg || '登录失败', 'error')
 		return Promise.reject(error)
 	}
 )
