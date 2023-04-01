@@ -12,12 +12,18 @@ const router = createRouter({
 		{
 			path: '/login',
 			name: 'login',
-			component: () => import('../pages/login/login.vue')
+			component: () => import('../pages/login/login.vue'),
+			meta: {
+				title: '登录页'
+			}
 		},
 		{
 			path: '/index',
 			name: 'index',
-			component: () => import('../pages/index/index.vue')
+			component: () => import('../pages/index/index.vue'),
+			meta: {
+				title: '首页'
+			}
 		},
 		{
 			path: '/:pathMatch(.*)*',
@@ -38,6 +44,8 @@ router.beforeEach((to, from) => {
 		toast('您已登录', 'info')
 		return from.path
 	}
+	const title = to.meta.title
+	document.title = title
 })
 
 export default router
