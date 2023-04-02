@@ -5,14 +5,13 @@ import { showModal } from '@/composables/useEle'
 import { useFullscreen } from '@vueuse/core'
 import { ref, reactive } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
+import FormDrawer from '@/components/formDrawer.vue'
 
 const { logoutAction, updatePasswordAction } = useLoginStore()
 
 const { isFullscreen, toggle } = useFullscreen()
 
-const drawer = ref(false)
-
-const isLoading = ref(false)
+const formDrawerRef = ref()
 
 const form = reactive({
 	oldpassword: '',
@@ -47,6 +46,7 @@ const rules = reactive<FormRules>({
 	]
 })
 
+// 修改密码
 const logout = () => {
 	showModal('是否要退出登录?').then(() => {
 		logoutAction()
@@ -56,7 +56,7 @@ const logout = () => {
 const handleCommand = (command: string | number | object) => {
 	switch (command) {
 		case 'rePassword':
-			drawer.value = true
+			formDrawerRef.value.open()
 			break
 		case 'logout':
 			logout()
@@ -71,16 +71,17 @@ const refresh = () => {
 const loginStore = useLoginStore()
 const { userInfo } = storeToRefs(loginStore)
 
+// 提交表单
 const onSubmit = (formEl: FormInstance | undefined) => {
-	isLoading.value = true
+	formDrawerRef.value.showLoading()
 	if (!formEl) return
 	formEl.validate((valid) => {
 		if (valid) {
 			updatePasswordAction(form).finally(() => {
-				isLoading.value = false
+				formDrawerRef.value.hideLoading()
 			})
 		} else {
-			isLoading.value = false
+			formDrawerRef.value.hideLoading()
 			return false
 		}
 	})
@@ -127,7 +128,7 @@ const enterSubmit = () => {
 			</el-dropdown>
 		</div>
 
-		<el-drawer v-model="drawer" title="修改密码" size="20%">
+		<form-drawer ref="formDrawerRef" title="修改密码" @submit="onSubmit(formRef)">
 			<el-form :model="form" class="w-[300px]" :rules="rules" ref="formRef" label-width="80px" size="small">
 				<el-form-item prop="oldpassword" label="旧密码">
 					<el-input v-model="form.oldpassword" placeholder="请输入旧密码" type="password" show-password>
@@ -152,13 +153,8 @@ const enterSubmit = () => {
 						<template #prefix> <IEpLock /> </template
 					></el-input>
 				</el-form-item>
-				<el-form-item>
-					<el-button class="w-[250px]" color="#626aef" round :loading="isLoading" @click="onSubmit(formRef)"
-						>提交</el-button
-					>
-				</el-form-item>
 			</el-form>
-		</el-drawer>
+		</form-drawer>
 	</div>
 </template>
 

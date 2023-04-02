@@ -28,6 +28,7 @@ declare module '@vue/runtime-core' {
     ElMain: typeof import('element-plus/es')['ElMain']
     ElRow: typeof import('element-plus/es')['ElRow']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
+    FormDrawer: typeof import('./components/formDrawer.vue')['default']
     IconEpFold: typeof import('~icons/ep/fold')['default']
     IconEpLock: typeof import('~icons/ep/lock')['default']
     IconEpUser: typeof import('~icons/ep/user')['default']
