@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import layoutHeader from './components/layoutHeader.vue'
 import layoutMenu from './components/layoutMenu.vue'
+import layoutContent from './components/layoutContent.vue'
 import { ref } from 'vue'
 
 const isFold = ref(false)
@@ -19,7 +20,7 @@ const handleFoldChange = (flag: boolean) => {
 					<layoutMenu :is-fold="isFold"></layoutMenu>
 				</el-aside>
 				<el-main>
-					<router-view></router-view>
+					<layoutContent></layoutContent>
 				</el-main>
 			</el-container>
 		</el-container>

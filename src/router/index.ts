@@ -1,15 +1,10 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { getToken } from '@/composables/auth'
 import { toast } from '@/composables/useEle'
-import { useLoginStore } from '@/stores/login'
 
 const router = createRouter({
 	history: createWebHashHistory(),
 	routes: [
-		{
-			path: '/',
-			redirect: '/index'
-		},
 		{
 			path: '/login',
 			name: 'login',
@@ -20,16 +15,8 @@ const router = createRouter({
 		},
 		{
 			path: '/',
-			component: () => import('../layout/admin.vue'),
-			children: [
-				{
-					path: 'index',
-					component: () => import('../pages/index/index.vue'),
-					meta: {
-						title: '首页'
-					}
-				}
-			]
+			name: 'admin',
+			component: () => import('../layout/admin.vue')
 		},
 		{
 			path: '/:pathMatch(.*)*',
@@ -38,9 +25,54 @@ const router = createRouter({
 	]
 })
 
+export const asyncRoutes = [
+	{
+		path: '/',
+		name: '/',
+		component: () => import('../pages/index/index.vue'),
+		meta: {
+			title: '首页'
+		}
+	},
+	{
+		path: '/goods/list',
+		name: 'Goods',
+		component: () => import('../pages/goods/goods.vue'),
+		meta: {
+			title: 'goods'
+		}
+	},
+	{
+		path: '/category/list',
+		name: 'Category',
+		component: () => import('../pages/category/category.vue'),
+		meta: {
+			title: 'category'
+		}
+	}
+]
+
+// 递归遍历菜单，将菜单对应的路由添加到路由表中
+export function mapMenusToRoutes(userMenus: any) {
+	const findAndAddRoutesByMenus = (menus: any) => {
+		menus.forEach((e: any) => {
+			const item = asyncRoutes.find((o) => {
+				return o.path === e.frontpath
+			})
+
+			if (item && !router.hasRoute(item.path)) {
+				router.addRoute('admin', item)
+			}
+			if (e.child && e.child.length) {
+				findAndAddRoutesByMenus(e.child)
+			}
+		})
+	}
+	findAndAddRoutesByMenus(userMenus)
+}
+
 router.beforeEach((to, from) => {
 	const token = getToken()
-	const { loadlocalCacheAction } = useLoginStore()
 
 	if (to.path !== '/login' && !token) {
 		toast('请先登录', 'error')
@@ -54,8 +86,6 @@ router.beforeEach((to, from) => {
 
 	const title = to.meta.title
 	document.title = title
-
-	loadlocalCacheAction()
 })
 
 export default router

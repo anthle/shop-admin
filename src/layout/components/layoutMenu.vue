@@ -2,6 +2,7 @@
 import { useLoginStore } from '@/stores/login'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
+import router from '@/router'
 
 const loginStore = useLoginStore()
 const { userInfo } = storeToRefs(loginStore)
@@ -10,8 +11,12 @@ defineProps<{
 	isFold: boolean
 }>()
 const defalutActive = computed(() => {
-	return '/'
+	return router.currentRoute.value.path
 })
+
+const menuItemClick = (child: any) => {
+	router.push(child.frontpath)
+}
 </script>
 
 <template>
@@ -33,7 +38,12 @@ const defalutActive = computed(() => {
 						</el-icon>
 						<span>{{ item.name }}</span>
 					</template>
-					<el-menu-item v-for="child in item.child" :key="child.id" :index="child.frontpath">
+					<el-menu-item
+						v-for="child in item.child"
+						:key="child.id"
+						:index="child.frontpath"
+						@click="menuItemClick(child)"
+					>
 						<template #title>
 							<el-icon>
 								<component :is="child.icon"></component>

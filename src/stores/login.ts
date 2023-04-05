@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { login, getUserInfo, logout } from '@/service'
-import router from '@/router'
+import router, { mapMenusToRoutes } from '@/router'
 import { toast } from '@/composables/useEle'
 import { removeToken, setToken, getToken } from '@/composables/auth'
 import state from './state'
@@ -28,13 +28,14 @@ export const useLoginStore = defineStore('login', {
 			this.userInfo = {}
 			router.push('/login')
 		},
+		// 从本地缓存中加载用户信息
 		loadlocalCacheAction() {
 			const token = getToken()
 			const userInfo = localStorage.getItem('userInfo')
 
 			if (token && userInfo) {
-				console.log('reload')
 				this.userInfo = JSON.parse(userInfo)
+				mapMenusToRoutes(this.userInfo.menus)
 			}
 		},
 		async updatePasswordAction(data: any) {
