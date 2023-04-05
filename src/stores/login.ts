@@ -33,6 +33,7 @@ export const useLoginStore = defineStore('login', {
 			const userInfo = localStorage.getItem('userInfo')
 
 			if (token && userInfo) {
+				console.log('reload')
 				this.userInfo = JSON.parse(userInfo)
 			}
 		},
