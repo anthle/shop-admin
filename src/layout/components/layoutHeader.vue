@@ -90,34 +90,50 @@ const onSubmit = (formEl: FormInstance | undefined) => {
 const enterSubmit = () => {
 	onSubmit(formRef.value)
 }
+
+const isFold = ref(false)
+const emit = defineEmits(['foldChange'])
+const handleMenuChangeClick = () => {
+	isFold.value = !isFold.value
+	emit('foldChange', isFold.value)
+}
 </script>
 
 <template>
 	<div class="flex items-center bg-indigo-500 text-white h-16 fixed left-0 right-0">
 		<span class="flex justify-center w-[250px] items-center text-xl font-thin">
-			<IEpEleme-filled class="mr-2" />
+			<el-icon class="mr-2"><Eleme-filled /> </el-icon>
 			shop-admin
 		</span>
-		<el-tooltip class="box-item" effect="dark" content="伸缩" placement="bottom">
-			<IEpFold class="cursor-pointer hover:bg-indigo-600 h-16 w-7 outline-none" />
-		</el-tooltip>
-		<el-tooltip class="box-item" effect="dark" content="刷新" placement="bottom">
-			<IEpRefresh class="cursor-pointer hover:bg-indigo-600 h-16 w-7 ml-4 outline-none" @click="refresh" />
-		</el-tooltip>
+		<div class="w-[30px] h-16 items-center flex hover:bg-indigo-600 cursor-pointer ml-8">
+			<el-tooltip class="box-item" effect="dark" content="伸缩" placement="bottom">
+				<el-icon size="30px">
+					<component :is="isFold ? 'Expand' : 'Fold'" @click="handleMenuChangeClick"> </component
+				></el-icon>
+			</el-tooltip>
+		</div>
+
+		<div class="w-[30px] h-16 items-center flex hover:bg-indigo-600 cursor-pointer ml-8">
+			<el-tooltip class="box-item" effect="dark" content="刷新" placement="bottom">
+				<el-icon size="30px" @click="refresh"><Refresh /></el-icon>
+			</el-tooltip>
+		</div>
 
 		<div class="ml-auto flex items-center">
-			<el-tooltip class="box-item" effect="dark" content="全屏" placement="bottom" v-if="!isFullscreen">
-				<IEpFull-screen class="cursor-pointer hover:bg-indigo-600 h-16 w-7 outline-none" @click="toggle" />
-			</el-tooltip>
-			<el-tooltip class="box-item" effect="dark" content="退出全屏" placement="bottom" v-else>
-				<IEpAim class="cursor-pointer hover:bg-indigo-600 h-16 w-7 outline-none" @click="toggle" />
-			</el-tooltip>
+			<div class="w-[30px] h-16 items-center flex hover:bg-indigo-600 cursor-pointer ml-4">
+				<el-tooltip class="box-item" effect="dark" content="全屏" placement="bottom" v-if="!isFullscreen">
+					<el-icon size="30px" @click="toggle"><Full-screen /></el-icon>
+				</el-tooltip>
+				<el-tooltip class="box-item" effect="dark" content="退出全屏" placement="bottom" v-else>
+					<el-icon size="30px" class="cursor-pointer hover:bg-indigo-600" @click="toggle"><Aim /></el-icon>
+				</el-tooltip>
+			</div>
 
 			<el-dropdown @command="handleCommand">
 				<span class="h-16 cursor-pointer flex justify-center items-center mx-5 text-white outline-none">
 					<el-avatar class="mr-2" :size="25" :src="userInfo.avatar"></el-avatar>
 					{{ userInfo.username }}
-					<IEpArrow-down class="ml-1" />
+					<el-icon><Arrow-down /></el-icon>
 				</span>
 				<template #dropdown>
 					<el-dropdown-menu>
@@ -133,13 +149,14 @@ const enterSubmit = () => {
 				<el-form-item prop="oldpassword" label="旧密码">
 					<el-input v-model="form.oldpassword" placeholder="请输入旧密码" type="password" show-password>
 						<template #prefix>
-							<IEpLock />
+							<el-icon><Lock /></el-icon>
 						</template>
 					</el-input>
 				</el-form-item>
 				<el-form-item prop="password" label="新密码">
 					<el-input v-model="form.password" placeholder="请输入新密码" type="password" show-password>
-						<template #prefix> <IEpLock /> </template
+						<template #prefix>
+							<el-icon><Lock /></el-icon> </template
 					></el-input>
 				</el-form-item>
 				<el-form-item prop="repassword" label="确认密码">
@@ -150,7 +167,8 @@ const enterSubmit = () => {
 						show-password
 						@keyup.enter="enterSubmit"
 					>
-						<template #prefix> <IEpLock /> </template
+						<template #prefix>
+							<el-icon><Lock /></el-icon> </template
 					></el-input>
 				</el-form-item>
 			</el-form>

@@ -74,7 +74,7 @@ const enterSubmit = () => {
 				<el-form-item prop="name">
 					<el-input v-model="form.name" placeholder="请输入用户名">
 						<template #prefix>
-							<IEpUser />
+							<el-icon><User /></el-icon>
 						</template>
 					</el-input>
 				</el-form-item>
@@ -86,7 +86,8 @@ const enterSubmit = () => {
 						show-password
 						@keyup.enter="enterSubmit"
 					>
-						<template #prefix> <IEpLock /> </template
+						<template #prefix
+							><el-icon><Lock /></el-icon> </template
 					></el-input>
 				</el-form-item>
 				<el-form-item>

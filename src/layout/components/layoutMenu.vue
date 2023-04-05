@@ -1,40 +1,63 @@
 <script setup lang="ts">
 import { useLoginStore } from '@/stores/login'
 import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
 
 const loginStore = useLoginStore()
 const { userInfo } = storeToRefs(loginStore)
 
-const asideMenus = userInfo
-console.log(asideMenus)
+defineProps<{
+	isFold: boolean
+}>()
+const defalutActive = computed(() => {
+	return '/'
+})
 </script>
 
 <template>
-	<div class="w-[250px] shadow-md fixed top-16 left-0 bottom-0">
-		<el-menu default-active="2" class="border-0">
-			<el-sub-menu index="1">
-				<template #title>
-					<el-icon><location /></el-icon>
-					<span>Navigator One</span>
-				</template>
-				<el-menu-item-group title="Group One">
-					<el-menu-item index="1-1">item one</el-menu-item>
-					<el-menu-item index="1-2">item two</el-menu-item>
-				</el-menu-item-group>
-				<el-menu-item-group title="Group Two">
-					<el-menu-item index="1-3">item three</el-menu-item>
-				</el-menu-item-group>
-				<el-sub-menu index="1-4">
-					<template #title>item four</template>
-					<el-menu-item index="1-4-1">item one</el-menu-item>
+	<div
+		class="transition-all duration-300 shadow-md fixed top-16 left-0 bottom-0"
+		:style="{ width: isFold ? '64px' : '250px' }"
+	>
+		<el-menu
+			class="el-menu-vertical-demo"
+			:collapse="isFold"
+			:collapse-transition="false"
+			:default-active="defalutActive"
+		>
+			<template v-for="item in userInfo.menus" :key="item.id">
+				<el-sub-menu :index="item.name" v-if="item.child && item.child.length > 0">
+					<template #title>
+						<el-icon size="20px">
+							<component :is="item.icon"></component>
+						</el-icon>
+						<span>{{ item.name }}</span>
+					</template>
+					<el-menu-item v-for="child in item.child" :key="child.id" :index="child.frontpath">
+						<template #title>
+							<el-icon>
+								<component :is="child.icon"></component>
+							</el-icon>
+							<span>{{ child.name }}</span>
+						</template>
+					</el-menu-item>
 				</el-sub-menu>
-			</el-sub-menu>
+				<el-sub-menu index="item.name" v-else>
+					<template #title>
+						<el-icon>
+							<component :is="item.icon"></component>
+						</el-icon>
+						<el-icon><User></User></el-icon>
+						<span>{{ item.name }}</span>
+					</template>
+				</el-sub-menu>
+			</template>
 		</el-menu>
 	</div>
 </template>
 
 <style lang="less" scoped>
-.menu {
-	color: #000;
+.el-menu {
+	border: none;
 }
 </style>
