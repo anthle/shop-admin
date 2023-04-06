@@ -14,7 +14,7 @@ export const useLoginStore = defineStore('login', {
 			toast('登录成功')
 			setToken(res.data.data.token)
 
-			router.push('/index')
+			router.push('/')
 		},
 		async getUserInfoAction() {
 			const res = await getUserInfo()
