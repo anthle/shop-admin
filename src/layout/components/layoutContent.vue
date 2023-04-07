@@ -1,7 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import layoutTabsList from './layoutTabsList.vue'
+</script>
 
 <template>
 	<div class="layoutContent">
+		<layoutTabsList></layoutTabsList>
 		<router-view></router-view>
 	</div>
 </template>
