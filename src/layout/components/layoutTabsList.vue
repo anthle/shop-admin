@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-let tabIndex = 2
+// let tabIndex = 2
 const editableTabsValue = ref('2')
 const editableTabs = ref([
 	{
@@ -21,15 +21,15 @@ const editableTabs = ref([
 	}
 ])
 
-const addTab = (targetName: string) => {
-	const newTabName = `${++tabIndex}`
-	editableTabs.value.push({
-		title: 'New Tab',
-		name: newTabName,
-		content: 'New Tab content'
-	})
-	editableTabsValue.value = newTabName
-}
+// const addTab = (targetName: string) => {
+// 	const newTabName = `${++tabIndex}`
+// 	editableTabs.value.push({
+// 		title: 'New Tab',
+// 		name: newTabName,
+// 		content: 'New Tab content'
+// 	})
+// 	editableTabsValue.value = newTabName
+// }
 const removeTab = (targetName: any) => {
 	const tabs = editableTabs.value
 	let activeName = editableTabsValue.value
