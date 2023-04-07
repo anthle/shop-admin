@@ -53,7 +53,7 @@ const logout = () => {
 	})
 }
 
-const handleCommand = (command: string | number | object) => {
+const handleCommand = (command: string) => {
 	switch (command) {
 		case 'rePassword':
 			formDrawerRef.value.open()

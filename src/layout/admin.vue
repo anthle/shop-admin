@@ -20,7 +20,7 @@ const handleFoldChange = (flag: boolean) => {
 					<layoutMenu :is-fold="isFold"></layoutMenu>
 				</el-aside>
 				<el-main>
-					<layoutContent></layoutContent>
+					<layoutContent :is-fold="isFold"></layoutContent>
 				</el-main>
 			</el-container>
 		</el-container>

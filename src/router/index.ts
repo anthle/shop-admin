@@ -39,7 +39,7 @@ export const asyncRoutes = [
 		name: 'Goods',
 		component: () => import('../pages/goods/goods.vue'),
 		meta: {
-			title: 'goods'
+			title: '商品信息'
 		}
 	},
 	{
@@ -47,7 +47,7 @@ export const asyncRoutes = [
 		name: 'Category',
 		component: () => import('../pages/category/category.vue'),
 		meta: {
-			title: 'category'
+			title: '分类'
 		}
 	}
 ]
