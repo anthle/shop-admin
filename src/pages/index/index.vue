@@ -2,7 +2,7 @@
 
 <template>
 	<div class="index">
-		<h2>index</h2>
+		<h2>index1</h2>
 	</div>
 </template>
 
