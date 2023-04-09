@@ -3,7 +3,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { useLoginStore } from '@/stores/login'
 
-const { loginAction, getUserInfoAction } = useLoginStore()
+const { loginAction } = useLoginStore()
 const isLoading = ref(false)
 const form = reactive({
 	name: '',
@@ -35,13 +35,9 @@ const onSubmit = (formEl: FormInstance | undefined) => {
 	if (!formEl) return
 	formEl.validate((valid) => {
 		if (valid) {
-			loginAction(form.name, form.password)
-				.then(() => {
-					getUserInfoAction()
-				})
-				.finally(() => {
-					isLoading.value = false
-				})
+			loginAction(form.name, form.password).finally(() => {
+				isLoading.value = false
+			})
 		} else {
 			isLoading.value = false
 			return false

@@ -14,12 +14,15 @@ export const useLoginStore = defineStore('login', {
 			toast('登录成功')
 			setToken(res.data.data.token)
 
+			// 获取用户信息
+			const res1 = await getUserInfo()
+			this.userInfo = res1.data.data
+			localStorage.setItem('userInfo', JSON.stringify(res1.data.data))
+			console.log(this.userInfo)
+
+			mapMenusToRoutes(this.userInfo.menus)
+
 			router.push('/')
-		},
-		async getUserInfoAction() {
-			const res = await getUserInfo()
-			this.userInfo = res.data.data
-			localStorage.setItem('userInfo', JSON.stringify(res.data.data))
 		},
 		async logoutAction() {
 			await logout()
