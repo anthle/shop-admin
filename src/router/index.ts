@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { getToken } from '@/composables/auth'
 import { toast } from '@/composables/useEle'
+import { asyncRoutes } from './asyncRoutes'
 
 const router = createRouter({
 	history: createWebHashHistory(),
@@ -24,33 +25,6 @@ const router = createRouter({
 		}
 	]
 })
-
-export const asyncRoutes = [
-	{
-		path: '/',
-		name: '/',
-		component: () => import('../pages/index/index.vue'),
-		meta: {
-			title: '首页'
-		}
-	},
-	{
-		path: '/goods/list',
-		name: 'Goods',
-		component: () => import('../pages/goods/goods.vue'),
-		meta: {
-			title: '商品信息'
-		}
-	},
-	{
-		path: '/category/list',
-		name: 'Category',
-		component: () => import('../pages/category/category.vue'),
-		meta: {
-			title: '分类'
-		}
-	}
-]
 
 // 递归遍历菜单，将菜单对应的路由添加到路由表中
 export function mapMenusToRoutes(userMenus: any) {

@@ -21,7 +21,7 @@ const menuItemClick = (child: any) => {
 
 <template>
 	<div
-		class="transition-all duration-300 shadow-md fixed top-16 left-0 bottom-0"
+		class="transition-all duration-300 shadow-md fixed top-16 left-0 bottom-0 bg-white"
 		:style="{ width: isFold ? '64px' : '250px' }"
 	>
 		<el-menu

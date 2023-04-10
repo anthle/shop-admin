@@ -9,13 +9,11 @@ defineProps<{
 <template>
 	<div class="layoutContent">
 		<layoutTabsList :is-fold="isFold"></layoutTabsList>
-
+		<div class="h-11"></div>
 		<router-view v-slot="{ Component }">
-			<transition name="fade">
-				<keep-alive :max="10">
-					<component :is="Component"></component>
-				</keep-alive>
-			</transition>
+			<keep-alive :max="10">
+				<component :is="Component"></component>
+			</keep-alive>
 		</router-view>
 	</div>
 </template>

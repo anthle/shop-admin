@@ -97,10 +97,11 @@ const handleMenuChangeClick = () => {
 	isFold.value = !isFold.value
 	emit('foldChange', isFold.value)
 }
+// flex items-center bg-indigo-500 text-white h-16 fixed left-0 right-0
 </script>
 
 <template>
-	<div class="flex items-center bg-indigo-500 text-white h-16 fixed left-0 right-0">
+	<div class="f-header">
 		<span class="flex justify-center w-[250px] items-center text-xl font-thin">
 			<el-icon class="mr-2"><Eleme-filled /> </el-icon>
 			shop-admin
@@ -143,8 +144,7 @@ const handleMenuChangeClick = () => {
 				</template>
 			</el-dropdown>
 		</div>
-
-		<form-drawer ref="formDrawerRef" title="修改密码" @submit="onSubmit(formRef)">
+		<form-drawer ref="formDrawerRef" title="修改密码" destroyOnClose @click="onSubmit(formRef)">
 			<el-form :model="form" class="w-[300px]" :rules="rules" ref="formRef" label-width="80px" size="small">
 				<el-form-item prop="oldpassword" label="旧密码">
 					<el-input v-model="form.oldpassword" placeholder="请输入旧密码" type="password" show-password>
@@ -181,5 +181,9 @@ const handleMenuChangeClick = () => {
 	line-height: 36px;
 	padding: 6px 22px;
 	font-weight: 600;
+}
+.f-header {
+	@apply flex items-center bg-indigo-700 text-gray-50 fixed top-0 left-0 right-0;
+	height: 64px;
 }
 </style>

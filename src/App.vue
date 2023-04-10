@@ -6,4 +6,9 @@
 	</div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.app {
+	@apply bg-gray-100;
+	height: 100vh;
+}
+</style>

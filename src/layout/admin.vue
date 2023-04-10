@@ -14,7 +14,9 @@ const handleFoldChange = (flag: boolean) => {
 <template>
 	<div class="admin">
 		<el-container>
-			<el-header><layoutHeader @fold-change="handleFoldChange" /></el-header>
+			<el-header>
+				<layoutHeader @fold-change="handleFoldChange" />
+			</el-header>
 			<el-container>
 				<el-aside :width="isFold ? '64px' : '250px'">
 					<layoutMenu :is-fold="isFold"></layoutMenu>

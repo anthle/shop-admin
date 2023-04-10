@@ -51,7 +51,7 @@ defineExpose({
 		v-model="showDrawer"
 		:title="title"
 		:size="size"
-		:destoryClose="destoryClose"
+		:destroy-on-close="destoryClose"
 		:close-on-click-modal="false"
 	>
 		<div class="w-full h-full flex flex-col">
