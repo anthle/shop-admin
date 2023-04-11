@@ -17,7 +17,6 @@ getStatistics().then((res) => {
 const goods = ref([])
 const order = ref([])
 getStatistics2().then((res) => {
-	console.log(res.data.data)
 	goods.value = res.data.data.goods
 	order.value = res.data.data.order
 })
@@ -82,10 +81,10 @@ getStatistics2().then((res) => {
 	</el-row>
 
 	<el-row :gutter="20">
-		<el-col :span="12" :offset="0">
+		<el-col :span="12" :offset="0" v-permission="['getStatistics1,GET']">
 			<indexChart />
 		</el-col>
-		<el-col :span="12" :offset="0">
+		<el-col :span="12" :offset="0" v-permission="['getStatistics2,GET']">
 			<indexCard title="店铺及商品提示" tip="店铺及商品提示" :info="goods" />
 			<indexCard title="交易提示" tip="需要立即处理的交易订单" :info="order" />
 		</el-col>

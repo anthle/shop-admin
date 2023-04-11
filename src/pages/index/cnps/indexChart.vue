@@ -27,9 +27,10 @@ const handleChoose = (value: string) => {
 let myChart: any = null
 onMounted(() => {
 	let chartDom = document.getElementById('chart')
-	myChart = echarts.init(chartDom as HTMLElement)
-
-	getData()
+	if (chartDom) {
+		myChart = echarts.init(chartDom as HTMLElement)
+		getData()
+	}
 })
 
 onBeforeMount(() => {
@@ -70,7 +71,7 @@ function getData() {
 // 监听容器大小变化更新图表
 const el = ref(null)
 useResizeObserver(el, () => {
-	myChart.resize()
+	if (myChart) myChart.resize()
 })
 </script>
 
