@@ -43,7 +43,6 @@ export function mapMenusToRoutes(userMenus: any) {
 		})
 	}
 	findAndAddRoutesByMenus(userMenus)
-	console.log(router.getRoutes())
 }
 
 router.beforeEach((to, from) => {

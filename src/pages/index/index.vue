@@ -1,15 +1,25 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { getStatistics } from '@/service/main/dashboard'
+import { getStatistics, getStatistics2 } from '@/service/main/dashboard'
 import CountTo from '@/components/countTo.vue'
 import { iconNavs } from './iconsNav'
 import { useRouter } from 'vue-router'
+import indexChart from './cnps/indexChart.vue'
+import indexCard from './cnps/indexCard.vue'
 
 const router = useRouter()
 
 const panels = ref([] as any[])
 getStatistics().then((res) => {
 	panels.value = res.data.data.panels
+})
+
+const goods = ref([])
+const order = ref([])
+getStatistics2().then((res) => {
+	console.log(res.data.data)
+	goods.value = res.data.data.goods
+	order.value = res.data.data.order
 })
 </script>
 
@@ -57,6 +67,7 @@ getStatistics().then((res) => {
 			</el-card>
 		</el-col>
 	</el-row>
+
 	<el-row :gutter="20" class="mt-5">
 		<el-col :span="3" :offset="0" v-for="item in iconNavs" :key="item.path">
 			<el-card shadow="hover" @click="router.push(item.path)">
@@ -67,6 +78,16 @@ getStatistics().then((res) => {
 					<span class="text-sm mt-2">{{ item.title }}</span>
 				</div>
 			</el-card>
+		</el-col>
+	</el-row>
+
+	<el-row :gutter="20">
+		<el-col :span="12" :offset="0">
+			<indexChart />
+		</el-col>
+		<el-col :span="12" :offset="0">
+			<indexCard title="店铺及商品提示" tip="店铺及商品提示" :info="goods" />
+			<indexCard title="交易提示" tip="需要立即处理的交易订单" :info="order" />
 		</el-col>
 	</el-row>
 </template>
