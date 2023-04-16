@@ -13,7 +13,7 @@ export function toast(
 	message = '操作成功',
 	type: eleInfoType = 'success',
 	title = '',
-	dangerouslyUseHTMLString = false,
+	dangerouslyUseHTMLString = true,
 	duration = 2000
 ) {
 	return ElNotification({

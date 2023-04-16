@@ -4,13 +4,20 @@ import ImageMain from '@/components/imageMain.vue'
 
 const windowHeight = window.innerHeight || document.body.clientHeight
 const h = windowHeight - 64 - 44 - 40
+
+const imgAsideRef = ref<InstanceType<typeof ImageAside>>()
+const handleAddImgType = () => {
+	imgAsideRef.value!.handleAdd()
+}
 </script>
 
 <template>
 	<el-container :style="{ height: h + 'px' }" class="bg-white">
-		<el-header class="img-header">Header</el-header>
+		<el-header class="img-header">
+			<el-button type="primary" @click="handleAddImgType">新增图片分类</el-button>
+		</el-header>
 		<el-container>
-			<ImageAside />
+			<ImageAside ref="imgAsideRef" />
 			<ImageMain />
 		</el-container>
 	</el-container>
