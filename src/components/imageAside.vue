@@ -23,8 +23,9 @@ const getData = (page: number = 1) => {
 			list.value = res.data.data.list
 			total.value = res.data.data.totalCount
 			let item = list.value[0]
+
 			if (item) {
-				active.value = item.id
+				handdleListItemClick(item.id)
 			}
 		})
 		.finally(() => {
@@ -83,6 +84,7 @@ const title = computed(() => {
 })
 
 const itemId = ref(null)
+
 const handleEdit = (item: any) => {
 	formDrawerRef.value.open()
 	isEdit.value = true
@@ -106,6 +108,13 @@ const handleDelete = (itemId: number) => {
 		})
 }
 
+// 侧边栏点击事件
+const emit = defineEmits(['change'])
+const handdleListItemClick = (id: any) => {
+	active.value = id
+	emit('change', id)
+}
+
 defineExpose({
 	handleAdd,
 	form
@@ -121,6 +130,7 @@ defineExpose({
 				:active="item.id === active"
 				@edit="handleEdit(item)"
 				@close="handleDelete(item.id)"
+				@click="handdleListItemClick(item.id)"
 			></asideList>
 		</div>
 		<div class="bottom">

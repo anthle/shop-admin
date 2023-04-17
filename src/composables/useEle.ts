@@ -7,7 +7,6 @@ type eleInfoType = 'success' | 'warning' | 'info' | 'error'
  * @param title 消息标题
  * @param dangerouslyUseHTMLString 是否将 message 属性作为 HTML 片段处理
  * @param duration 持续时间
- * @returns
  */
 export function toast(
 	message = '操作成功',
@@ -30,12 +29,24 @@ export function toast(
  * @param content 提示内容
  * @param type 提示类型
  * @param title 提示标题
- * @returns
  */
 export function showModal(content = '提示内容', type: eleInfoType = 'warning', title = '') {
 	return ElMessageBox.confirm(content, title, {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type
+	})
+}
+
+/**
+ *
+ * @param tip 提示内容
+ * @param value 输入框默认值
+ */
+export function showPrompt(tip: string, value: any) {
+	return ElMessageBox.prompt(tip, '', {
+		confirmButtonText: '确认',
+		cancelButtonText: '取消',
+		inputValue: value
 	})
 }

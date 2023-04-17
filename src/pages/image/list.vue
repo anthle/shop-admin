@@ -9,16 +9,26 @@ const imgAsideRef = ref<InstanceType<typeof ImageAside>>()
 const handleAddImgType = () => {
 	imgAsideRef.value!.handleAdd()
 }
+
+const imgMainRef = ref<InstanceType<typeof ImageMain>>()
+const handleAsideChange = (id: number) => {
+	imgMainRef.value!.loadData(id)
+}
+
+const handleUploadImg = () => {
+	imgMainRef.value!.openDrawer()
+}
 </script>
 
 <template>
 	<el-container :style="{ height: h + 'px' }" class="bg-white">
 		<el-header class="img-header">
 			<el-button type="primary" @click="handleAddImgType">新增图片分类</el-button>
+			<el-button type="warning" @click="handleUploadImg">上传图片</el-button>
 		</el-header>
 		<el-container>
-			<ImageAside ref="imgAsideRef" />
-			<ImageMain />
+			<ImageAside ref="imgAsideRef" @change="handleAsideChange" />
+			<ImageMain ref="imgMainRef" />
 		</el-container>
 	</el-container>
 </template>

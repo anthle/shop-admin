@@ -15,3 +15,17 @@ export function updateImageClass(id: any, data: any) {
 export function deleteImageClass(id: any) {
 	return request.post(`/admin/image_class/${id}/delete`)
 }
+
+export function getImageListById(id: any, page: any) {
+	return request.get(`/admin/image_class/${id}/image/${page}?limit=10`)
+}
+
+export function updateImageName(id: number, name: any) {
+	return request.post(`/admin/image/${id}`, { name })
+}
+
+export function deleteImage(ids: any) {
+	return request.post('/admin/image/delete_all', { ids })
+}
+
+export const uploadImgAction = '/api/admin/image/upload'

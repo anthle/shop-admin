@@ -14,7 +14,7 @@ defineEmits(['edit', 'close'])
 <template>
 	<div class="aside-list" :class="{ active: active }">
 		<span>{{ title }}</span>
-		<el-button class="ml-auto p-1" text type="primary" size="small" @click="$emit('edit')">
+		<el-button class="ml-auto p-1" text type="primary" size="small" @click.stop="$emit('edit')">
 			<el-icon><Edit /></el-icon>
 		</el-button>
 
