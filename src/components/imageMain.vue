@@ -10,12 +10,16 @@ const list = ref([] as any[])
 const activeId = ref(0)
 const loading = ref(false)
 
+// 获取数据
 const getData = (page: number = 1) => {
 	currentPage.value = page
 	loading.value = true
 	getImageListById(activeId.value, currentPage.value)
 		.then((res) => {
-			list.value = res.data.data.list
+			list.value = res.data.data.list.map((item: any) => {
+				item.checked = false
+				return item
+			})
 			total.value = res.data.data.totalCount
 		})
 		.finally(() => {
@@ -69,6 +73,26 @@ const handleUploadSuccess = () => {
 	getData(1)
 }
 
+// 选择图片
+const checkedImage = computed(() => {
+	return list.value.filter((item: any) => item.checked)
+})
+const emit = defineEmits(['choose'])
+const handleChooseChange = (item: any) => {
+	if (item.checked && checkedImage.value.length > 1) {
+		item.checked = false
+		return toast('只能选择一张图片', 'error')
+	}
+	emit('choose', checkedImage.value)
+}
+
+defineProps({
+	openClose: {
+		type: Boolean,
+		default: false
+	}
+})
+
 defineExpose({
 	loadData,
 	openDrawer
@@ -80,10 +104,16 @@ defineExpose({
 		<div class="top p-3">
 			<el-row :gutter="20">
 				<el-col :span="6" :offset="0" v-for="item in list" :key="item.id">
-					<el-card shadow="hover" class="relative mb-3" :body-style="{ padding: 0 }">
+					<el-card
+						shadow="hover"
+						class="relative mb-3"
+						:body-style="{ padding: 0 }"
+						:class="{ borderSet: item.checked }"
+					>
 						<el-image :src="item.url" fit="cover" class="w-full h-[150px]"></el-image>
 						<div class="image-title">{{ item.name }}</div>
 						<div class="flex justify-center items-center p-2">
+							<el-checkbox v-if="openClose" v-model="item.checked" @change="handleChooseChange(item)"></el-checkbox>
 							<el-button type="primary" size="small" text @click="updataImgName(item)">重命名</el-button>
 							<el-popconfirm
 								title="是否要删除该图片?"
@@ -145,5 +175,8 @@ defineExpose({
 	right: 0;
 	left: 0;
 	@apply text-sm truncate text-gray-100 bg-opacity-60 bg-gray-800 px-2 py-1;
+}
+.borderSet {
+	@apply border border-solid border-blue-500;
 }
 </style>

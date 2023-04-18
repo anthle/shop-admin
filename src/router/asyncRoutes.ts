@@ -76,7 +76,15 @@ export const asyncRoutes = [
 		name: 'Order',
 		component: () => import('../pages/order/list.vue'),
 		meta: {
-			title: '优惠券列表'
+			title: '订单列表'
+		}
+	},
+	{
+		path: '/manager/list',
+		name: 'Manager',
+		component: () => import('../pages/manager/list.vue'),
+		meta: {
+			title: '管理员列表'
 		}
 	}
 ]
