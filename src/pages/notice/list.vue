@@ -19,6 +19,8 @@ const getData = (page: number = 1) => {
 	loading.value = true
 	getNoticeList(currentPage.value)
 		.then((res) => {
+			console.log(res)
+
 			tableData.value = res.data.data.list
 			total.value = res.data.data.totalCount
 		})
@@ -109,7 +111,8 @@ const handleDelete = (id: number) => {
 		</div>
 		<el-table :data="tableData" stripe style="width: 100%" table-layout="fixed" v-loading="loading">
 			<el-table-column prop="title" label="公告标题" width="180" align="center" />
-			<el-table-column prop="create_time" label="发布时间" align="center" />
+			<el-table-column prop="content" label="公告内容" align="center" />
+			<el-table-column prop="create_time" label="发布时间" width="180" align="center" />
 			<el-table-column label="操作" width="180" align="center">
 				<template #default="scoped">
 					<el-button type="primary" size="small" text @click="handleUpdateNotice(scoped.row)">修改</el-button>
