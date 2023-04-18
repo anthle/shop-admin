@@ -135,7 +135,13 @@ defineExpose({
 			></asideList>
 		</div>
 		<div class="bottom">
-			<el-pagination background layout="prev, next" :total="total" @current-change="getData" />
+			<el-pagination
+				background
+				layout="prev, next"
+				:total="total"
+				@current-change="getData"
+				v-model:current-page="currentPage"
+			/>
 		</div>
 	</el-aside>
 

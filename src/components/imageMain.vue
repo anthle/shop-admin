@@ -102,7 +102,13 @@ defineExpose({
 			</el-row>
 		</div>
 		<div class="bottom">
-			<el-pagination background layout="prev,pager, next" :total="total" @current-change="getData" />
+			<el-pagination
+				background
+				layout="prev,pager, next"
+				:total="total"
+				@current-change="getData"
+				v-model:current-page="currentPage"
+			/>
 		</div>
 	</el-main>
 
