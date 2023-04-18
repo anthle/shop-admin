@@ -15,6 +15,7 @@ const loading = ref(false)
 const total = ref(0)
 const currentPage = ref()
 
+// 获取数据
 const getData = (page: number = 1) => {
 	currentPage.value = page
 	loading.value = true

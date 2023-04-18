@@ -18,19 +18,21 @@ defineEmits(['edit', 'close'])
 			<el-icon><Edit /></el-icon>
 		</el-button>
 
-		<el-popconfirm
-			title="是否要删除该分类?"
-			confirm-button-text="确定"
-			cancel-button-text="取消"
-			width="180"
-			@confirm="$emit('close')"
-		>
-			<template #reference>
-				<el-button class="p-1" text type="primary" size="small">
-					<el-icon><Close /></el-icon>
-				</el-button>
-			</template>
-		</el-popconfirm>
+		<span @click.stop="() => {}">
+			<el-popconfirm
+				title="是否要删除该分类?"
+				confirm-button-text="确定"
+				cancel-button-text="取消"
+				width="180"
+				@confirm="$emit('close')"
+			>
+				<template #reference>
+					<el-button class="p-1" text type="primary" size="small">
+						<el-icon><Close /></el-icon>
+					</el-button>
+				</template>
+			</el-popconfirm>
+		</span>
 	</div>
 </template>
 
