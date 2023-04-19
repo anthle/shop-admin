@@ -1,100 +1,27 @@
 <script setup lang="ts">
 import { getNoticeList, createNotice, updateNotice, deleteNotice } from '@/service/main/noticeList'
 import formDrawer from '@/components/formDrawer.vue'
-import { toast } from '@/composables/useEle'
-import type { FormInstance } from 'element-plus'
+import { useInitTable, useInitForm } from '@/composables/useCommon'
 
-const tableData = ref([{}])
-const loading = ref(false)
-const isEdit = ref(false)
-const noticeId = ref(0)
-
-// 分页
-const total = ref(0)
-const currentPage = ref()
-
-// 获取数据
-const getData = (page: number = 1) => {
-	currentPage.value = page
-	loading.value = true
-	getNoticeList(currentPage.value)
-		.then((res) => {
-			console.log(res)
-
-			tableData.value = res.data.data.list
-			total.value = res.data.data.totalCount
-		})
-		.finally(() => {
-			loading.value = false
-		})
-}
-
-getData()
-
-// 表单
-
-const form = reactive({
-	title: '',
-	content: ''
+const { tableData, loading, total, currentPage, getData, handleDelete } = useInitTable({
+	getList: getNoticeList,
+	delete: deleteNotice
 })
 
-const rules = {
-	title: [{ required: true, message: '请输入公告标题', trigger: 'blur' }],
-	content: [{ required: true, message: '请输入公告内容', trigger: 'blur' }]
-}
-const formRef = ref<FormInstance>()
-
-const formDrawerRef = ref<InstanceType<typeof formDrawer>>()
-
-const handleSubmit = () => {
-	formRef.value?.validate((valid: boolean) => {
-		if (!valid) return
-
-		formDrawerRef.value?.showLoading()
-
-		const fun = isEdit.value ? updateNotice(noticeId.value, form) : createNotice(form)
-
-		fun
-			.then(() => {
-				toast(title.value + '成功')
-				getData(isEdit.value ? currentPage.value : 1)
-				formDrawerRef.value?.close()
-			})
-			.finally(() => {
-				formDrawerRef.value?.hideLoading()
-			})
-	})
-}
-
-// 新增公告
-const handleCreate = () => {
-	isEdit.value = false
-	formDrawerRef.value?.open()
-	form.title = ''
-	form.content = ''
-}
-
-// 修改公告
-const handleUpdateNotice = (row: any) => {
-	isEdit.value = true
-	formDrawerRef.value?.open()
-	form.title = row.title
-	form.content = row.content
-	noticeId.value = row.id
-}
-
-const title = computed(() => {
-	return isEdit.value ? '修改' : '新增'
+const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleUpdateNotice, title } = useInitForm({
+	form: {
+		title: '',
+		content: ''
+	},
+	currentPage,
+	rules: {
+		title: [{ required: true, message: '请输入公告标题', trigger: 'blur' }],
+		content: [{ required: true, message: '请输入公告内容', trigger: 'blur' }]
+	},
+	getData,
+	update: updateNotice,
+	create: createNotice
 })
-
-// 删除公告
-
-const handleDelete = (id: number) => {
-	deleteNotice(id).then(() => {
-		toast('删除成功')
-		getData(1)
-	})
-}
 </script>
 
 <template>

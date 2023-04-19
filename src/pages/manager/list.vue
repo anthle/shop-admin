@@ -7,131 +7,51 @@ import {
 	deleteManager
 } from '@/service/main/manager'
 import formDrawer from '@/components/formDrawer.vue'
-import { toast } from '@/composables/useEle'
-import type { FormInstance } from 'element-plus'
 import chooseImage from '@/components/chooseImage.vue'
+import { useInitTable, useInitForm } from '@/composables/useCommon'
 
-const tableData = ref([{}])
-const loading = ref(false)
-const isEdit = ref(false)
-const managerId = ref(0)
-const serachForm = reactive({
-	keyword: ''
-})
 const roles = ref([] as any[])
 
-// 分页
-const total = ref(0)
-const currentPage = ref()
-
-// 获取数据
-const getData = (page: number = 1) => {
-	currentPage.value = page
-	loading.value = true
-	getManagerLilst(currentPage.value, serachForm)
-		.then((res) => {
-			tableData.value = res.data.data.list.map((item: any) => {
-				item.statusLoading = false
-				return item
-			})
-			total.value = res.data.data.totalCount
-			roles.value = res.data.data.roles
+const {
+	tableData,
+	serachForm,
+	loading,
+	total,
+	currentPage,
+	resetSearchForm,
+	getData,
+	handleDelete,
+	handleChangeStatus
+} = useInitTable({
+	searchForm: {
+		keyword: ''
+	},
+	getList: getManagerLilst,
+	delete: deleteManager,
+	updateStatus: updateManagerStatus,
+	onGetListSuccess: (res: any) => {
+		tableData.value = res.data.data.list.map((item: any) => {
+			item.statusLoading = false
+			return item
 		})
-		.finally(() => {
-			loading.value = false
-		})
-}
-
-getData()
-
-// 表单
-const form = reactive({
-	username: '',
-	password: '',
-	role_id: [] as any[],
-	status: 1,
-	avatar: ''
+		total.value = res.data.data.totalCount
+		roles.value = res.data.data.roles
+	}
 })
 
-const rules = {}
-
-const formRef = ref<FormInstance>()
-
-const formDrawerRef = ref<InstanceType<typeof formDrawer>>()
-
-const handleSubmit = () => {
-	formRef.value?.validate((valid: boolean) => {
-		if (!valid) return
-		formDrawerRef.value?.showLoading()
-		const fun = isEdit.value ? updateManager(managerId.value, form) : createManager(form)
-
-		fun
-			.then(() => {
-				toast(title.value + '成功')
-				getData(isEdit.value ? currentPage.value : 1)
-				formDrawerRef.value?.close()
-			})
-			.finally(() => {
-				formDrawerRef.value?.hideLoading()
-			})
-	})
-}
-
-// 新增管理员
-const handleCreate = () => {
-	isEdit.value = false
-	formDrawerRef.value?.open()
-	form.username = ''
-	form.password = ''
-	form.status = 1
-	form.avatar = ''
-}
-
-// 修改管理员
-const handleUpdateNotice = (row: any) => {
-	isEdit.value = true
-	formDrawerRef.value?.open()
-	form.username = row.username
-	form.password = row.password
-	form.role_id = row.role_id
-	form.status = row.status
-	form.avatar = row.avatar
-	managerId.value = row.id
-}
-
-const title = computed(() => {
-	return isEdit.value ? '修改' : '新增'
+const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleUpdateNotice, title } = useInitForm({
+	form: {
+		username: '',
+		password: '',
+		role_id: [] as any[],
+		status: 1,
+		avatar: ''
+	},
+	currentPage,
+	getData,
+	update: updateManager,
+	create: createManager
 })
-
-// 删除管理员
-
-const handleDelete = (id: number) => {
-	deleteManager(id).then(() => {
-		toast('删除成功')
-		getData(1)
-	})
-}
-
-//搜索
-const resetSearchForm = () => {
-	serachForm.keyword = ''
-	getData()
-}
-
-// 修改状态
-const handleChangeStatus = (status: any, row: any) => {
-	if (!row.id) return
-
-	row.statusLoading = true
-	updateManagerStatus(row.id, status)
-		.then(() => {
-			toast('修改状态成功')
-			row.status = status
-		})
-		.finally(() => {
-			row.statusLoading = false
-		})
-}
 </script>
 
 <template>
@@ -151,7 +71,7 @@ const handleChangeStatus = (status: any, row: any) => {
 				</el-col>
 				<el-col :span="8" :offset="8">
 					<div class="flex items-center justify-end">
-						<el-button type="primary" @click.enter="getData()">搜索</el-button>
+						<el-button type="primary" @click="getData()">搜索</el-button>
 						<el-button type="primary" @click="resetSearchForm">重置</el-button>
 					</div>
 				</el-col>
