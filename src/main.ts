@@ -1,3 +1,5 @@
+// pary for mom
+
 import { createApp } from 'vue'
 
 import App from './App.vue'
