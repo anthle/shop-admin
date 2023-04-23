@@ -1,19 +1,20 @@
 <script setup lang="ts">
 import listHeader from '@/components/listHeader.vue'
 import { useInitTable, useInitForm } from '@/composables/useCommon'
-import { getRuleList, updateRuleList, createRuleList } from '@/service/main/rule'
+import { getRuleList, updateRuleList, createRuleList, updateRuleStates, deleteRule } from '@/service/main/rule'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 const defalutExpandedKeys = ref([])
 const options = ref([])
-const { tableData, loading, getData, currentPage } = useInitTable({
+const { tableData, loading, getData, currentPage, handleDelete, handleChangeStatus } = useInitTable({
 	getList: getRuleList,
 	onGetListSuccess: (res: any) => {
-		console.log(res.data.data.rules)
-
 		tableData.value = res.data.data.list
 		defalutExpandedKeys.value = res.data.data.list.map((item: any) => item.id)
 		options.value = res.data.data.rules
-	}
+	},
+	delete: deleteRule,
+	updateStatus: updateRuleStates
 })
 
 const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleUpdate, title } = useInitForm({
@@ -34,6 +35,15 @@ const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleU
 	update: updateRuleList,
 	create: createRuleList
 })
+
+const icons = ref(Object.keys(ElementPlusIconsVue))
+
+// 增加子分类
+const addChild = (id: number) => {
+	handleCreate()
+	form.rule_id = id
+	form.status = 1
+}
 </script>
 
 <template>
@@ -54,10 +64,30 @@ const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleU
 					</el-icon>
 					<span>{{ data.name }}</span>
 					<div class="ml-auto">
-						<el-switch :modelValue="data.status" :active-value="1" :inactive-value="0"></el-switch>
+						<span @click.stop>
+							<el-switch
+								:modelValue="data.status"
+								:active-value="1"
+								:inactive-value="0"
+								@change="handleChangeStatus(data.status, data)"
+							></el-switch>
+						</span>
+
 						<el-button text type="primary" size="small" @click.stop="handleUpdate(data)">修改</el-button>
-						<el-button text type="primary" size="small">增加</el-button>
-						<el-button text type="primary" size="small">删除</el-button>
+						<el-button text type="primary" size="small" @click.stop="addChild(data.id)">增加</el-button>
+						<span @click.stop>
+							<el-popconfirm
+								title="是否要删除该记录?"
+								confirm-button-text="确定"
+								cancel-button-text="取消"
+								width="180"
+								@confirm="handleDelete(data.id)"
+							>
+								<template #reference>
+									<el-button type="primary" size="small" text>删除</el-button>
+								</template>
+							</el-popconfirm>
+						</span>
 					</div>
 				</div>
 			</template>
@@ -68,8 +98,9 @@ const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleU
 		<el-form :model="form" :rules="rules" ref="formRef" label-width="80px" class="w-full">
 			<el-form-item label="上级菜单" prop="rule_id">
 				<el-cascader
+					v-model="form.rule_id"
 					:options="options"
-					:props="{ label: 'name', children: 'child', checkStrictly: true, emitPath: false }"
+					:props="{ label: 'name', value: 'id', children: 'child', checkStrictly: true, emitPath: false }"
 					clearable
 					placeholder="请选择上级菜单"
 				/>
@@ -84,7 +115,21 @@ const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleU
 				<el-input v-model="form.name" placeholder="名称" style="width: 30%"></el-input>
 			</el-form-item>
 			<el-form-item label="菜单图标" prop="icon" v-if="form.menu === 1">
-				<el-input v-model="form.icon" placeholder="菜单图标"></el-input>
+				<div class="flex items-center">
+					<el-icon v-if="form.icon" :size="20" class="mr-2">
+						<component :is="form.icon"></component>
+					</el-icon>
+					<el-select v-model="form.icon" placeholder="请选择图标" filterable>
+						<el-option v-for="item in icons" :key="item" :label="item" :value="item">
+							<div class="flex items-center justify-between">
+								<el-icon>
+									<component :is="item"></component>
+								</el-icon>
+								<span class="text-gray-500">{{ item }}</span>
+							</div>
+						</el-option>
+					</el-select>
+				</div>
 			</el-form-item>
 			<el-form-item label="前端路由" prop="frontpath" v-if="form.menu === 1 && form.rule_id > 0">
 				<el-input v-model="form.frontpath" placeholder="前端路由"></el-input>
