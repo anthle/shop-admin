@@ -86,5 +86,13 @@ export const asyncRoutes = [
 		meta: {
 			title: '管理员列表'
 		}
+	},
+	{
+		path: '/access/list',
+		name: 'Access',
+		component: () => import('../pages/access/list.vue'),
+		meta: {
+			title: '管理员权限'
+		}
 	}
 ]

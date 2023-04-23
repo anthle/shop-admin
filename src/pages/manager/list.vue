@@ -9,6 +9,7 @@ import {
 import formDrawer from '@/components/formDrawer.vue'
 import chooseImage from '@/components/chooseImage.vue'
 import { useInitTable, useInitForm } from '@/composables/useCommon'
+import listHeader from '@/components/listHeader.vue'
 
 const roles = ref([] as any[])
 
@@ -79,16 +80,7 @@ const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleU
 		</el-form>
 
 		<!-- 新增 -->
-		<div class="top mb-4 flex justify-between">
-			<el-button type="primary" @click="handleCreate">新增</el-button>
-			<el-tooltip class="box-item" effect="dark" content="刷新数据" placement="top">
-				<el-button text @click="getData()">
-					<el-icon :size="20">
-						<Refresh />
-					</el-icon>
-				</el-button>
-			</el-tooltip>
-		</div>
+		<listHeader @create="handleCreate" @refresh="getData()"></listHeader>
 
 		<!-- 表格 -->
 		<el-table :data="tableData" stripe style="width: 100%" table-layout="fixed" v-loading="loading">

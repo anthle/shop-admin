@@ -128,7 +128,7 @@ export function useInitForm(option: FormOption = {} as FormOption) {
 	}
 
 	// 修改管理员
-	const handleUpdateNotice = (row: any) => {
+	const handleUpdate = (row: any) => {
 		isEdit.value = true
 		formDrawerRef.value?.open()
 		resetForm(row)
@@ -146,7 +146,7 @@ export function useInitForm(option: FormOption = {} as FormOption) {
 		formDrawerRef,
 		handleSubmit,
 		handleCreate,
-		handleUpdateNotice,
+		handleUpdate,
 		title
 	}
 }

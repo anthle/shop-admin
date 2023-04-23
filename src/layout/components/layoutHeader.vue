@@ -100,7 +100,7 @@ const handleMenuChangeClick = () => {
 </script>
 
 <template>
-	<div class="flex items-center bg-indigo-500 text-white h-16 fixed left-0 right-0">
+	<div class="flex items-center bg-indigo-500 text-white h-16 fixed left-0 right-0 z-50">
 		<span class="flex justify-center w-[250px] items-center text-xl font-thin">
 			<el-icon class="mr-2"><Eleme-filled /> </el-icon>
 			shop-admin
