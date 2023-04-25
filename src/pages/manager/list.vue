@@ -40,7 +40,7 @@ const {
 	}
 })
 
-const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleUpdateNotice, title } = useInitForm({
+const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleUpdate, title } = useInitForm({
 	form: {
 		username: '',
 		password: '',
@@ -118,7 +118,7 @@ const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleU
 				<template #default="{ row }">
 					<span v-if="row.id === 3">无法操作</span>
 					<div v-else>
-						<el-button type="primary" size="small" text @click="handleUpdateNotice(row)">修改</el-button>
+						<el-button type="primary" size="small" text @click="handleUpdate(row)">修改</el-button>
 						<el-popconfirm
 							title="是否要删除该管理员?"
 							confirm-button-text="确定"
