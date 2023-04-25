@@ -94,5 +94,13 @@ export const asyncRoutes = [
 		meta: {
 			title: '管理员权限'
 		}
+	},
+	{
+		path: '/role/list',
+		name: 'Role',
+		component: () => import('../pages/role/list.vue'),
+		meta: {
+			title: '角色管理'
+		}
 	}
 ]

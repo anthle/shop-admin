@@ -9,7 +9,7 @@
 <style lang="less">
 .app {
 	@apply bg-gray-100;
-	height: 100%;
+	height: 100vh;
 }
 ::-webkit-scrollbar {
 	width: 4px;
