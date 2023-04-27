@@ -64,6 +64,7 @@ declare module '@vue/runtime-core' {
     ListHeader: typeof import('./components/listHeader.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TagInput: typeof import('./components/tagInput.vue')['default']
     UploadFile: typeof import('./components/uploadFile.vue')['default']
     UploadImg: typeof import('./components/uploadImg.vue')['default']
   }
