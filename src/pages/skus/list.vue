@@ -77,7 +77,7 @@ const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleU
 		</div>
 	</el-card>
 
-	<formDrawer ref="formDrawerRef" :title="title" @submit="handleSubmit" size="30%">
+	<formDrawer ref="formDrawerRef" :title="title" @submit="handleSubmit" destoryClose size="30%">
 		<el-form :model="form" :rules="rules" ref="formRef" label-width="80px" class="w-full">
 			<el-form-item label="规格名称" prop="name">
 				<el-input v-model="form.name" placeholder="角色名称"></el-input>

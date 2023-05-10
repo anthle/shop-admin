@@ -1,3 +1,40 @@
+<script lang="ts" setup>
+import { nextTick, ref } from 'vue'
+import { ElInput } from 'element-plus'
+
+const props = defineProps({
+	modelValue: String
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+const inputValue = ref('')
+const dynamicTags = ref(props.modelValue ? props.modelValue.split(',') : [])
+const inputVisible = ref(false)
+const InputRef = ref<InstanceType<typeof ElInput>>()
+
+const handleClose = (tag: string) => {
+	dynamicTags.value.splice(dynamicTags.value.indexOf(tag), 1)
+	emit('update:modelValue', dynamicTags.value.join(','))
+}
+
+const showInput = () => {
+	inputVisible.value = true
+	nextTick(() => {
+		InputRef.value!.input!.focus()
+	})
+}
+
+const handleInputConfirm = () => {
+	if (inputValue.value) {
+		dynamicTags.value.push(inputValue.value)
+		emit('update:modelValue', dynamicTags.value.join(','))
+	}
+	inputVisible.value = false
+	inputValue.value = ''
+}
+</script>
+
 <template>
 	<el-tag
 		v-for="tag in dynamicTags"
@@ -20,36 +57,3 @@
 	/>
 	<el-button v-else class="button-new-tag ml-1" size="small" @click="showInput"> + New Tag </el-button>
 </template>
-
-<script lang="ts" setup>
-import { nextTick, ref } from 'vue'
-import { ElInput } from 'element-plus'
-
-const props = defineProps({
-	modelValue: String
-})
-
-const inputValue = ref('')
-const dynamicTags = ref(props.modelValue ? props.modelValue.split(',') : [])
-const inputVisible = ref(false)
-const InputRef = ref<InstanceType<typeof ElInput>>()
-
-const handleClose = (tag: string) => {
-	dynamicTags.value.splice(dynamicTags.value.indexOf(tag), 1)
-}
-
-const showInput = () => {
-	inputVisible.value = true
-	nextTick(() => {
-		InputRef.value!.input!.focus()
-	})
-}
-
-const handleInputConfirm = () => {
-	if (inputValue.value) {
-		dynamicTags.value.push(inputValue.value)
-	}
-	inputVisible.value = false
-	inputValue.value = ''
-}
-</script>
