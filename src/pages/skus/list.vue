@@ -5,7 +5,18 @@ import { useInitTable, useInitForm } from '@/composables/useCommon'
 import listHeader from '@/components/listHeader.vue'
 import TagInput from '@/components/tagInput.vue'
 
-const { tableData, loading, total, currentPage, getData, handleDelete, handleChangeStatus } = useInitTable({
+const {
+	tableData,
+	loading,
+	total,
+	currentPage,
+	getData,
+	handleDelete,
+	handleChangeStatus,
+	handleSelectionChange,
+	multipleTableRef,
+	handleMultiDelete
+} = useInitTable({
 	getList: getSkusList,
 	delete: deleteSkus,
 	updateStatus: updateSkusStatus
@@ -31,9 +42,18 @@ const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleU
 
 <template>
 	<el-card>
-		<listHeader @create="handleCreate" @refresh="getData" />
+		<listHeader @create="handleCreate" @refresh="getData" @delete="handleMultiDelete" layout="create,delete,refresh" />
 
-		<el-table :data="tableData" stripe style="width: 100%" table-layout="fixed" v-loading="loading">
+		<el-table
+			ref="multipleTableRef"
+			:data="tableData"
+			stripe
+			style="width: 100%"
+			table-layout="fixed"
+			v-loading="loading"
+			@selection-change="handleSelectionChange"
+		>
+			<el-table-column type="selection" width="55" />
 			<el-table-column prop="name" label="规格名称" width="180" align="center" />
 			<el-table-column prop="default" label="规格值" align="center" />
 			<el-table-column prop="order" label="排序" align="center" />
@@ -52,7 +72,7 @@ const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleU
 					<el-button type="primary" size="small" text @click="handleUpdate(scoped.row)">修改</el-button>
 
 					<el-popconfirm
-						title="是否要删除该公告?"
+						title="是否要删除该规格?"
 						confirm-button-text="确定"
 						cancel-button-text="取消"
 						width="180"

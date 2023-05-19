@@ -1,7 +1,7 @@
 interface Option {
 	getList: (page: number, serachForm?: any) => Promise<any>
 	onGetListSuccess?: (res: any) => void
-	delete?: (id: number) => Promise<any>
+	delete?: (id: number | number[]) => Promise<any>
 	updateStatus?: (id: number, status: number) => Promise<any>
 	searchForm?: any
 }
@@ -13,6 +13,7 @@ interface FormOption {
 	form: any
 	currentPage: any
 	rules?: any
+	beforeSubmit?: (res: any) => any
 }
 
 interface Form {

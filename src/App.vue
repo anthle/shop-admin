@@ -2,7 +2,7 @@
 
 <template>
 	<div class="app">
-		<router-view>123</router-view>
+		<router-view></router-view>
 	</div>
 </template>
 

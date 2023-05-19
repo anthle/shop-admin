@@ -39,7 +39,7 @@ const handleInputConfirm = () => {
 	<el-tag
 		v-for="tag in dynamicTags"
 		:key="tag"
-		class="mx-1"
+		class="mx-1 my-2"
 		closable
 		:disable-transitions="false"
 		@close="handleClose(tag)"
