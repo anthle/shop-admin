@@ -1,6 +1,6 @@
 import request from '../request'
 
-export function getManagerLilst(page: number, query: any = {}) {
+export function getManagerList(page: number, query: any = {}) {
 	const q = []
 	for (const key in query) {
 		if (query[key]) {
@@ -25,6 +25,6 @@ export function updateManager(id: number, data: any) {
 	return request.post(`/admin/manager/${id}`, data)
 }
 
-export function deleteManager(id: number) {
+export function deleteManager(id: number | number[]) {
 	return request.post(`/admin/manager/${id}/delete`)
 }

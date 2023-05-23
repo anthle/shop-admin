@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {
-	getManagerLilst,
+	getManagerList,
 	updateManagerStatus,
 	createManager,
 	updateManager,
@@ -15,7 +15,7 @@ const roles = ref([] as any[])
 
 const {
 	tableData,
-	serachForm,
+	searchForm,
 	loading,
 	total,
 	currentPage,
@@ -27,7 +27,7 @@ const {
 	searchForm: {
 		keyword: ''
 	},
-	getList: getManagerLilst,
+	getList: getManagerList,
 	delete: deleteManager,
 	updateStatus: updateManagerStatus,
 	onGetListSuccess: (res: any) => {
@@ -58,12 +58,12 @@ const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleU
 <template>
 	<!-- 搜索 -->
 	<el-card shadow="never" class="border-0">
-		<el-form :model="serachForm" label-width="80" class="mb-3" size="small">
+		<el-form :model="searchForm" label-width="80" class="mb-3" size="small">
 			<el-row :gutter="20">
 				<el-col :span="8" :offset="0">
 					<el-form-item label="关键词">
 						<el-input
-							v-model="serachForm.keyword"
+							v-model="searchForm.keyword"
 							placeholder="管理员昵称"
 							clearable
 							@keydown.enter="getData()"

@@ -1,5 +1,5 @@
 interface Option {
-	getList: (page: number, serachForm?: any) => Promise<any>
+	getList: (page: number, searchForm?: any) => Promise<any>
 	onGetListSuccess?: (res: any) => void
 	delete?: (id: number | number[]) => Promise<any>
 	updateStatus?: (id: number, status: number) => Promise<any>
