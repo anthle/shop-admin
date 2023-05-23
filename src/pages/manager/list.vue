@@ -10,6 +10,8 @@ import formDrawer from '@/components/formDrawer.vue'
 import chooseImage from '@/components/chooseImage.vue'
 import { useInitTable, useInitForm } from '@/composables/useCommon'
 import listHeader from '@/components/listHeader.vue'
+import Search from '@/components/search.vue'
+import SearchItem from '@/components/searchItem.vue'
 
 const roles = ref([] as any[])
 
@@ -58,26 +60,11 @@ const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleU
 <template>
 	<!-- 搜索 -->
 	<el-card shadow="never" class="border-0">
-		<el-form :model="searchForm" label-width="80" class="mb-3" size="small">
-			<el-row :gutter="20">
-				<el-col :span="8" :offset="0">
-					<el-form-item label="关键词">
-						<el-input
-							v-model="searchForm.keyword"
-							placeholder="管理员昵称"
-							clearable
-							@keydown.enter="getData()"
-						></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :span="8" :offset="8">
-					<div class="flex items-center justify-end">
-						<el-button type="primary" @click="getData()">搜索</el-button>
-						<el-button type="primary" @click="resetSearchForm">重置</el-button>
-					</div>
-				</el-col>
-			</el-row>
-		</el-form>
+		<Search :model="searchForm" @search="getData()" @reset="resetSearchForm">
+			<SearchItem label="关键词">
+				<el-input v-model="searchForm.keyword" placeholder="管理员昵称" clearable @keydown.enter="getData()"></el-input>
+			</SearchItem>
+		</Search>
 
 		<!-- 新增 -->
 		<listHeader @create="handleCreate" @refresh="getData()"></listHeader>
