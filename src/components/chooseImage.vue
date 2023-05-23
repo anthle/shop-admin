@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ImageAside from '@/components/imageAside.vue'
 import ImageMain from '@/components/imageMain.vue'
+import { toast } from '@/composables/useEle'
 
 // open
 const dialogTableVisible = ref(false)
@@ -25,7 +26,10 @@ const handleUploadImg = () => {
 }
 
 // 选择头像
-defineProps(['modelValue'])
+const props = defineProps<{
+	modelValue: any
+	limit?: any
+}>()
 const emit = defineEmits(['update:modelValue'])
 
 let urls: string[] = []
@@ -34,16 +38,48 @@ const handleChooseImage = (item: any) => {
 }
 
 const submit = () => {
+	let value = [] as any
+	if (props.limit === 1) {
+		value = urls[0]
+	} else {
+		value = [...props.modelValue, ...urls]
+		if (value.length > props.limit) {
+			return toast('最多还能选择' + (props.limit - props.modelValue.length) + '张')
+		}
+	}
 	if (urls.length) {
-		emit('update:modelValue', urls[0])
+		emit('update:modelValue', value)
 		dialogTableVisible.value = false
 	}
+}
+
+const removeImage = (url: any) => {
+	emit(
+		'update:modelValue',
+		props.modelValue.filter((u: any) => u != url)
+	)
 }
 </script>
 
 <template>
 	<div v-if="modelValue">
-		<el-image :src="modelValue" fit="cover" :lazy="true" class="w-[100px] h-[100px] rounded mr-2"></el-image>
+		<el-image
+			v-if="typeof modelValue == 'string'"
+			:src="modelValue"
+			fit="cover"
+			:lazy="true"
+			class="w-[100px] h-[100px] rounded mr-2"
+		></el-image>
+		<div v-else class="flex flex-wrap">
+			<div class="relative mx-1 mb-2 w-[100px] h-[100px]" v-for="(url, index) in modelValue" :key="index">
+				<el-icon
+					class="!absolute right-[5px] top-[5px] z-10 cursor-pointer bg-white rounded-full"
+					@click="removeImage(url)"
+					><CircleClose
+				/></el-icon>
+				<el-image :src="url" fit="cover" :lazy="true" class="w-[100px] h-[100px] border mr-2"></el-image>
+			</div>
+		</div>
 	</div>
 	<div
 		class="w-[100px] h-[100px] rounded border border-gray-100 border-solid flex justify-center items-center cursor-pointer hover:bg-gray-100"
@@ -60,7 +96,7 @@ const submit = () => {
 			</el-header>
 			<el-container>
 				<ImageAside ref="imgAsideRef" @change="handleAsideChange" />
-				<ImageMain openClose ref="imgMainRef" @choose="handleChooseImage" />
+				<ImageMain :limit="limit" openClose ref="imgMainRef" @choose="handleChooseImage" />
 			</el-container>
 		</el-container>
 		<template #footer>

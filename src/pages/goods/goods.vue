@@ -7,6 +7,7 @@ import { useInitTable, useInitForm } from '@/composables/useCommon'
 import listHeader from '@/components/listHeader.vue'
 import Search from '@/components/search.vue'
 import SearchItem from '@/components/searchItem.vue'
+import banners from './c-cnps/banners.vue'
 
 const {
 	tableData,
@@ -33,7 +34,7 @@ const {
 	updateStatus: updateGoodsStatus,
 	onGetListSuccess: (res: any) => {
 		tableData.value = res.data.data.list.map((item: any) => {
-			item.statusLoading = false
+			item.bannersLoading = false
 			return item
 		})
 		total.value = res.data.data.totalCount
@@ -91,6 +92,10 @@ const category_list = ref()
 getCategoryList().then((res) => {
 	category_list.value = res.data.data
 })
+
+// 设置轮播图
+const bannersRef = ref()
+const handleSetGoodsBanners = (row: any) => bannersRef.value.open(row)
 </script>
 
 <template>
@@ -183,7 +188,15 @@ getCategoryList().then((res) => {
 					<div v-if="searchForm.tab != 'delete'">
 						<el-button class="px-1" type="primary" size="small" text @click="handleUpdate(row)">修改</el-button>
 						<el-button class="px-1" type="primary" size="small" text>商品规格</el-button>
-						<el-button class="px-1" type="primary" size="small" text>商品轮播图</el-button>
+						<el-button
+							:type="row.goods_banner?.length == 0 ? 'danger' : 'primary'"
+							class="px-1"
+							size="small"
+							text
+							@click="handleSetGoodsBanners(row)"
+							:loading="row.bannersLoading"
+							>设置轮播图</el-button
+						>
 						<el-button class="px-1" type="primary" size="small" text>商品详情</el-button>
 						<el-popconfirm
 							title="是否要删除该管理员?"
@@ -266,6 +279,8 @@ getCategoryList().then((res) => {
 			</el-form-item>
 		</el-form>
 	</formDrawer>
+
+	<banners ref="bannersRef" @reloadDate="getData" />
 </template>
 
 <style lang="less" scoped></style>

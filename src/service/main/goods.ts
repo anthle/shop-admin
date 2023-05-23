@@ -27,3 +27,13 @@ export function deleteGoods(ids: number | number[]) {
 		ids
 	})
 }
+
+export function readGoods(id: number) {
+	return request.get(`/admin/goods/read/${id}`)
+}
+
+export function setGoodsBanner(id: number, banners: any) {
+	return request.post(`/admin/goods/banners/${id}`, {
+		banners
+	})
+}

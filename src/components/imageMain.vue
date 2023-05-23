@@ -33,7 +33,7 @@ const loadData = (id: any) => {
 }
 
 // 图片重命名
-const updataImgName = (item: any) => {
+const updateImgName = (item: any) => {
 	showPrompt('重命名', item.name).then(({ value }) => {
 		loading.value = true
 		updateImageName(item.id, value)
@@ -79,18 +79,21 @@ const checkedImage = computed(() => {
 })
 const emit = defineEmits(['choose'])
 const handleChooseChange = (item: any) => {
-	if (item.checked && checkedImage.value.length > 1) {
+	if (item.checked && checkedImage.value.length > props.limit) {
 		item.checked = false
-		return toast('只能选择一张图片', 'error')
+		return toast(`只能选择${props.limit}张图片`, 'error')
 	}
 	emit('choose', checkedImage.value)
 }
 
-defineProps({
-	openClose: {
-		type: Boolean,
-		default: false
-	}
+interface IPoprs {
+	openClose: boolean
+	limit?: any
+}
+
+const props = withDefaults(defineProps<IPoprs>(), {
+	openClose: false,
+	limit: 1
 })
 
 defineExpose({
@@ -114,7 +117,7 @@ defineExpose({
 						<div class="image-title">{{ item.name }}</div>
 						<div class="flex justify-center items-center p-2">
 							<el-checkbox v-if="openClose" v-model="item.checked" @change="handleChooseChange(item)"></el-checkbox>
-							<el-button type="primary" size="small" text @click="updataImgName(item)">重命名</el-button>
+							<el-button type="primary" size="small" text @click="updateImgName(item)">重命名</el-button>
 							<el-popconfirm
 								title="是否要删除该图片?"
 								confirm-button-text="确定"

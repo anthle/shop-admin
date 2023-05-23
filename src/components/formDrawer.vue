@@ -60,7 +60,7 @@ defineExpose({
 			</div>
 			<div class="my-2">
 				<el-button type="primary" :loading="isLoading" @click="submit">{{ confirmText }}</el-button>
-				<el-button tpye="defalut" @click="close">取消</el-button>
+				<el-button type="default" @click="close">取消</el-button>
 			</div>
 		</div>
 	</el-drawer>
