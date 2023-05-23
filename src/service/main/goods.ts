@@ -6,7 +6,8 @@ export function getGoodsList(page: number, query: any = {}) {
 	return request.get(`/admin/goods/${page}${r}`)
 }
 
-export function updateGoodsStatus(ids: number, status: any) {
+// 批量上架下架
+export function updateGoodsStatus(ids: any, status: number) {
 	return request.post(`admin/goods/changestatus`, {
 		ids,
 		status
