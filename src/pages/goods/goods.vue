@@ -8,6 +8,7 @@ import listHeader from '@/components/listHeader.vue'
 import Search from '@/components/search.vue'
 import SearchItem from '@/components/searchItem.vue'
 import banners from './c-cnps/banners.vue'
+import content from './c-cnps/content.vue'
 
 const {
 	tableData,
@@ -35,6 +36,7 @@ const {
 	onGetListSuccess: (res: any) => {
 		tableData.value = res.data.data.list.map((item: any) => {
 			item.bannersLoading = false
+			item.contentLoading = false
 			return item
 		})
 		total.value = res.data.data.totalCount
@@ -96,6 +98,10 @@ getCategoryList().then((res) => {
 // 设置轮播图
 const bannersRef = ref()
 const handleSetGoodsBanners = (row: any) => bannersRef.value.open(row)
+
+// 设置轮播图
+const contentRef = ref()
+const handleSetGoodsContent = (row: any) => contentRef.value.open(row)
 </script>
 
 <template>
@@ -197,7 +203,15 @@ const handleSetGoodsBanners = (row: any) => bannersRef.value.open(row)
 							:loading="row.bannersLoading"
 							>设置轮播图</el-button
 						>
-						<el-button class="px-1" type="primary" size="small" text>商品详情</el-button>
+						<el-button
+							class="px-1"
+							size="small"
+							text
+							:type="!row.content?.length ? 'danger' : 'primary'"
+							@click="handleSetGoodsContent(row)"
+							:loading="row.contentLoading"
+							>商品详情</el-button
+						>
 						<el-popconfirm
 							title="是否要删除该管理员?"
 							confirm-button-text="确定"
@@ -281,6 +295,7 @@ const handleSetGoodsBanners = (row: any) => bannersRef.value.open(row)
 	</formDrawer>
 
 	<banners ref="bannersRef" @reloadDate="getData" />
+	<content ref="contentRef" />
 </template>
 
 <style lang="less" scoped></style>

@@ -27,7 +27,7 @@ const loading = ref(false)
 const submit = () => {
 	loading.value = true
 	setGoodsBanner(goodsId.value, form.banners)
-		.then((res) => {
+		.then(() => {
 			toast('设置轮播图成功')
 			dialogVisible.value = false
 			emit('reloadDate')

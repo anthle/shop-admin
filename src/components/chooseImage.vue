@@ -5,7 +5,10 @@ import { toast } from '@/composables/useEle'
 
 // open
 const dialogTableVisible = ref(false)
-const open = () => {
+//回调函数用于preview为false的情况下向Editor组件传值
+const callbackFunction = ref()
+const open = (callback: any = null) => {
+	callbackFunction.value = callback
 	dialogTableVisible.value = true
 }
 
@@ -26,10 +29,15 @@ const handleUploadImg = () => {
 }
 
 // 选择头像
-const props = defineProps<{
-	modelValue: any
+interface Props {
+	modelValue?: any
 	limit?: any
-}>()
+	preview: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+	preview: true
+})
 const emit = defineEmits(['update:modelValue'])
 
 let urls: string[] = []
@@ -42,13 +50,18 @@ const submit = () => {
 	if (props.limit === 1) {
 		value = urls[0]
 	} else {
-		value = [...props.modelValue, ...urls]
+		value = props.preview ? [...props.modelValue, ...urls] : [...urls]
 		if (value.length > props.limit) {
-			return toast('最多还能选择' + (props.limit - props.modelValue.length) + '张')
+			let limit = props.preview ? props.limit - props.modelValue.length : props.limit
+			return toast('最多还能选择' + limit + '张')
 		}
 	}
-	if (urls.length) {
+	if (value && props.preview) {
 		emit('update:modelValue', value)
+		dialogTableVisible.value = false
+	}
+	if (!props.preview && typeof callbackFunction.value === 'function') {
+		callbackFunction.value(value)
 		dialogTableVisible.value = false
 	}
 }
@@ -59,10 +72,14 @@ const removeImage = (url: any) => {
 		props.modelValue.filter((u: any) => u != url)
 	)
 }
+
+defineExpose({
+	open
+})
 </script>
 
 <template>
-	<div v-if="modelValue">
+	<div v-if="modelValue && preview">
 		<el-image
 			v-if="typeof modelValue == 'string'"
 			:src="modelValue"
@@ -82,8 +99,9 @@ const removeImage = (url: any) => {
 		</div>
 	</div>
 	<div
+		v-if="preview"
 		class="w-[100px] h-[100px] rounded border border-gray-100 border-solid flex justify-center items-center cursor-pointer hover:bg-gray-100"
-		@click="open"
+		@click="open()"
 	>
 		<el-icon :size="25" class="text-gray-500"><Plus /></el-icon>
 	</div>

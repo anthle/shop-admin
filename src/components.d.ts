@@ -13,6 +13,7 @@ declare module '@vue/runtime-core' {
     ChooseImage: typeof import('./components/chooseImage.vue')['default']
     copy: typeof import('./components/imageAside copy.vue')['default']
     CountTo: typeof import('./components/countTo.vue')['default']
+    Editor: typeof import('./components/Editor.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
