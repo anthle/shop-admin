@@ -9,6 +9,7 @@ import Search from '@/components/search.vue'
 import SearchItem from '@/components/searchItem.vue'
 import banners from './c-cnps/banners.vue'
 import content from './c-cnps/content.vue'
+import skus from './c-cnps/skus.vue'
 
 const {
 	tableData,
@@ -19,7 +20,6 @@ const {
 	resetSearchForm,
 	getData,
 	handleDelete,
-	handleChangeStatus,
 	multipleTableRef,
 	handleMultiDelete,
 	handleSelectionChange,
@@ -37,6 +37,7 @@ const {
 		tableData.value = res.data.data.list.map((item: any) => {
 			item.bannersLoading = false
 			item.contentLoading = false
+			item.skusLoading = false
 			return item
 		})
 		total.value = res.data.data.totalCount
@@ -102,6 +103,10 @@ const handleSetGoodsBanners = (row: any) => bannersRef.value.open(row)
 // 设置轮播图
 const contentRef = ref()
 const handleSetGoodsContent = (row: any) => contentRef.value.open(row)
+
+// 设置轮播图
+const skusRef = ref()
+const handleSetGoodsSkus = (row: any) => skusRef.value.open(row)
 </script>
 
 <template>
@@ -193,7 +198,9 @@ const handleSetGoodsContent = (row: any) => contentRef.value.open(row)
 				<template #default="{ row }">
 					<div v-if="searchForm.tab != 'delete'">
 						<el-button class="px-1" type="primary" size="small" text @click="handleUpdate(row)">修改</el-button>
-						<el-button class="px-1" type="primary" size="small" text>商品规格</el-button>
+						<el-button class="px-1" type="primary" size="small" text @click="handleSetGoodsSkus(row)"
+							>商品规格</el-button
+						>
 						<el-button
 							:type="row.goods_banner?.length == 0 ? 'danger' : 'primary'"
 							class="px-1"
@@ -295,7 +302,8 @@ const handleSetGoodsContent = (row: any) => contentRef.value.open(row)
 	</formDrawer>
 
 	<banners ref="bannersRef" @reloadDate="getData" />
-	<content ref="contentRef" />
+	<content ref="contentRef" @reloadDate="getData" />
+	<skus ref="skusRef" @reloadDate="getData" />
 </template>
 
 <style lang="less" scoped></style>

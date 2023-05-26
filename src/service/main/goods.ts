@@ -37,3 +37,9 @@ export function setGoodsBanner(id: number, banners: any) {
 		banners
 	})
 }
+
+export function updateGoodsSkus(id: number, data: any) {
+	return request.post(`/admin/goods/updateskus/${id}`, {
+		data
+	})
+}
