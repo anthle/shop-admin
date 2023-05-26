@@ -2,7 +2,7 @@ interface Option {
 	getList: (page: number, searchForm?: any) => Promise<any>
 	onGetListSuccess?: (res: any) => void
 	delete?: (id: number | number[]) => Promise<any>
-	updateStatus?: (id: number | number[], status: number) => Promise<any>
+	updateStatus?: (id: any, status: number) => Promise<any>
 	searchForm?: any
 }
 

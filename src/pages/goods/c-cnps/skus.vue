@@ -22,8 +22,6 @@ const open = (row: any) => {
 	row.skusLoading = true
 	readGoods(goodsId.value)
 		.then((res) => {
-			console.log(res)
-
 			form.sku_type = res.data.data.sku_type
 			form.sku_value = res.data.data.sku_value || {
 				oprice: 0,
