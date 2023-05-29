@@ -43,3 +43,7 @@ export function updateGoodsSkus(id: number, data: any) {
 		data
 	})
 }
+
+export function createGoodsSkusCard(data: any) {
+	return request.post(`/admin/goods_skus_card`, data)
+}

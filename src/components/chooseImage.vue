@@ -52,8 +52,6 @@ const submit = () => {
 	if (props.limit === 1) {
 		value = urls[0]
 	} else {
-		console.log(props.limit)
-
 		value = props.preview ? [...props.modelValue, ...urls] : [...urls]
 		if (value.length > props.limit) {
 			let limit = props.preview ? props.limit - props.modelValue.length : props.limit

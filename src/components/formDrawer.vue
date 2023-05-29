@@ -55,7 +55,7 @@ defineExpose({
 		:close-on-click-modal="false"
 	>
 		<div class="w-full h-full flex flex-col">
-			<div class="flex-1 overflow-y-auto text-black flex justify-center">
+			<div class="flex-1 overflow-y-auto text-black">
 				<slot></slot>
 			</div>
 			<div class="my-2">
