@@ -47,3 +47,27 @@ export function updateGoodsSkus(id: number, data: any) {
 export function createGoodsSkusCard(data: any) {
 	return request.post(`/admin/goods_skus_card`, data)
 }
+
+export function updateGoodsSkusCard(id: number, data: any) {
+	return request.post(`/admin/goods_skus_card/${id}`, data)
+}
+
+export function deleteGoodsSkusCard(id: any) {
+	return request.post(`/admin/goods_skus_card/${id}/delete`)
+}
+
+export function sortGoodsSkusCard(data: any) {
+	return request.post(`/admin/goods_skus_card/sort`, data)
+}
+
+export function createGoodsSkusCardValue(data: any) {
+	return request.post(`/admin/goods_skus_card_value`, data)
+}
+
+export function updateGoodsSkusCardValue(id: any, data: any) {
+	return request.post(`/admin/goods_skus_card_value/${id}`, data)
+}
+
+export function deleteGoodsSkusCardValue(id: any) {
+	return request.post(`/admin/goods_skus_card_value/${id}/delete`)
+}

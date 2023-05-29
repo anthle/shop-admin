@@ -20,3 +20,18 @@ export function queryParams(query: any) {
 	r = r ? '?' + r : ''
 	return r
 }
+
+// 交换数组索引
+export function swapIndex(arr: Array<any>, index1: number, index2: number) {
+	arr[index1] = arr.splice(index2, 1, arr[index1])[0]
+	return arr
+}
+
+// 上移
+export function useArrayMoveUp(arr: Array<any>, index: number) {
+	swapIndex(arr, index, index - 1)
+}
+// 下移
+export function useArrayMoveDown(arr: Array<any>, index: number) {
+	swapIndex(arr, index, index + 1)
+}

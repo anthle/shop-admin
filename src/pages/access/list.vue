@@ -4,13 +4,13 @@ import { useInitTable, useInitForm } from '@/composables/useCommon'
 import { getRuleList, updateRuleList, createRuleList, updateRuleStates, deleteRule } from '@/service/main/rule'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
-const defalutExpandedKeys = ref([])
+const defaultExpandedKeys = ref([])
 const options = ref([])
 const { tableData, loading, getData, currentPage, handleDelete, handleChangeStatus } = useInitTable({
 	getList: getRuleList,
 	onGetListSuccess: (res: any) => {
 		tableData.value = res.data.data.list
-		defalutExpandedKeys.value = res.data.data.list.map((item: any) => item.id)
+		defaultExpandedKeys.value = res.data.data.list.map((item: any) => item.id)
 		options.value = res.data.data.rules
 	},
 	delete: deleteRule,
@@ -54,7 +54,7 @@ const addChild = (id: number) => {
 			:props="{ label: 'name', children: 'child' }"
 			v-loading="loading"
 			node-key="id"
-			:default-expanded-keys="defalutExpandedKeys"
+			:default-expanded-keys="defaultExpandedKeys"
 		>
 			<template #default="{ data }">
 				<div class="flex flex-1 justify-center items-center text-sm pr-2">
@@ -107,8 +107,8 @@ const addChild = (id: number) => {
 			</el-form-item>
 			<el-form-item label="菜单/规则" prop="menu">
 				<el-radio-group v-model="form.menu">
-					<el-radio :label="1" size="large" border>菜单</el-radio>
 					<el-radio :label="0" size="large" border>规则</el-radio>
+					<el-radio :label="1" size="large" border>菜单</el-radio>
 				</el-radio-group>
 			</el-form-item>
 			<el-form-item label="名称" prop="name">

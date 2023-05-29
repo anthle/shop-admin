@@ -1,27 +1,51 @@
 <script setup lang="ts">
 import skuCardItem from './skuCardItem.vue'
-import { sku_card_list, addSkuCardEvent, btnLoading } from '@/composables/useSkus'
+import {
+	sku_card_list,
+	addSkuCardEvent,
+	btnLoading,
+	handleUpdate,
+	handleDelete,
+	sortCard,
+	bodyLoading
+} from '@/composables/useSkus'
 </script>
 
 <template>
-	<el-form-item label="规格选项">
-		<el-card shadow="never" class="w-full mb-3" v-for="item in sku_card_list" :key="item.id">
+	<el-form-item label="规格选项" v-loading="bodyLoading">
+		<el-card
+			shadow="never"
+			class="w-full mb-3"
+			v-for="(item, index) in sku_card_list"
+			:key="item.id"
+			v-loading="item.loading"
+		>
 			<template #header>
 				<div class="flex items-center">
-					<el-input v-model="item.text" placeholder="规格名称" style="width: 200px">
+					<el-input v-model="item.text" placeholder="规格名称" style="width: 200px" @blur="handleUpdate(item)">
 						<template #append>
 							<el-icon><More /></el-icon>
 						</template>
 					</el-input>
-					<el-button class="ml-auto">
+					<el-button class="ml-auto" @click="sortCard('up', index)" :disabled="index == 0">
 						<el-icon><Top /></el-icon>
 					</el-button>
-					<el-button>
+					<el-button @click="sortCard('down', index)" :disabled="index === sku_card_list.length - 1">
 						<el-icon><Bottom /></el-icon>
 					</el-button>
-					<el-button>
-						<el-icon><Delete /></el-icon>
-					</el-button>
+					<el-popconfirm
+						title="是否要删除该规格?"
+						confirm-button-text="确定"
+						cancel-button-text="取消"
+						width="180"
+						@confirm="handleDelete(item)"
+					>
+						<template #reference>
+							<el-button>
+								<el-icon><Delete /></el-icon>
+							</el-button>
+						</template>
+					</el-popconfirm>
 				</div>
 			</template>
 			<!-- card body -->

@@ -16,6 +16,6 @@ export function updateRuleStates(id: number, status: any) {
 	return request.post(`/admin/rule/${id}/update_status`, { status })
 }
 
-export function deleteRule(id: number) {
+export function deleteRule(id: number | number[]) {
 	return request.post(`/admin/rule/${id}/delete`)
 }
