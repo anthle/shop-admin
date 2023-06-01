@@ -3,6 +3,7 @@ import { toast } from '@/composables/useEle'
 import { readGoods, updateGoodsSkus } from '@/service/main/goods'
 import formDrawer from '@/components/formDrawer.vue'
 import skuCard from './skuCard.vue'
+import skuTable from './skuTable.vue'
 import { goodsId, initSkuCardList } from '@/composables/useSkus'
 
 const form = reactive({
@@ -58,7 +59,7 @@ defineExpose({
 })
 </script>
 <template>
-	<formDrawer ref="formDrawerRef" @submit="submit" title="设置商品规格" size="50%" destoryClose>
+	<formDrawer ref="formDrawerRef" @submit="submit" title="设置商品规格" size="60%" destoryClose>
 		<el-form :model="form" label-width="80px">
 			<el-form-item label="商品规格">
 				<el-radio-group v-model="form.sku_type">
@@ -95,6 +96,7 @@ defineExpose({
 			</template>
 			<template v-else>
 				<skuCard />
+				<skuTable />
 			</template>
 		</el-form>
 	</formDrawer>

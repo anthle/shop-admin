@@ -5,7 +5,7 @@ import type { Option, FormOption, Form } from '@/composables/types'
 
 // 列表、搜索、分页
 export function useInitTable(option: Option = {} as Option) {
-	const tableData = ref([{}])
+	const tableData = ref()
 	const loading = ref(false)
 	const total = ref(0)
 	const currentPage = ref()

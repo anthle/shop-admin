@@ -5,13 +5,16 @@ import {
 	sortGoodsSkusCard,
 	createGoodsSkusCardValue,
 	updateGoodsSkusCardValue,
-	deleteGoodsSkusCardValue
+	deleteGoodsSkusCardValue,
+	chooseAndSetGoodsSkusCard
 } from '@/service/main/goods'
 import { useArrayMoveDown, useArrayMoveUp } from '@/composables/utils'
 import type { ElInput } from 'element-plus'
+import { cartesianProductOf } from '@/composables/utils'
 
 export const goodsId = ref(0)
 export const sku_card_list = ref()
+export const sku_list = ref()
 // 初始化规格选项的值
 export function initSkuCardList(d: any) {
 	sku_card_list.value = d.goodsSkusCard.map((item: any) => {
@@ -23,6 +26,7 @@ export function initSkuCardList(d: any) {
 		})
 		return item
 	})
+	sku_list.value = d.goodsSkus
 }
 
 // 添加规格选项
@@ -75,13 +79,31 @@ export function handleDelete(item: any) {
 		if (i != -1) {
 			sku_card_list.value.splice(i, 1)
 		}
+		getTableData()
 	})
+}
+
+// 更改规格选择
+export function handleChooseSetGoodsSkusCard(id: number, data: any) {
+	const item = sku_card_list.value.find((o: any) => o.id == id)
+	item.loading = true
+	chooseAndSetGoodsSkusCard(id, data)
+		.then((res) => {
+			item.name = item.text = res.data.data.goods_skus_card.name
+			item.goodsSkusCardValue = res.data.data.goods_skus_card_value.map((o: any) => {
+				o.text = o.value || '属性值'
+				return o
+			})
+			getTableData()
+		})
+		.finally(() => {
+			item.loading = false
+		})
 }
 // 初始化规格的值
 export function initSkusCardItem(id: number) {
 	const item = sku_card_list.value.find((o: any) => o.id === id)
 	const inputValue = ref('')
-	const dynamicTags = ref(['Tag 1', 'Tag 2', 'Tag 3'])
 	const inputVisible = ref(false)
 	const InputRef = ref<InstanceType<typeof ElInput>>()
 
@@ -93,6 +115,7 @@ export function initSkusCardItem(id: number) {
 				if (i != -1) {
 					item.goodsSkusCardValue.splice(i, 1)
 				}
+				getTableData()
 			})
 			.finally(() => {
 				loading.value = false
@@ -126,6 +149,7 @@ export function initSkusCardItem(id: number) {
 					...res.data.data,
 					text: res.data.data.value
 				})
+				getTableData()
 			})
 			.finally(() => {
 				inputVisible.value = false
@@ -143,6 +167,7 @@ export function initSkusCardItem(id: number) {
 		})
 			.then(() => {
 				tag.value = value
+				getTableData()
 			})
 			.catch(() => {
 				tag.text = tag.value
@@ -170,8 +195,107 @@ export function sortCard(action: string, index: number) {
 	})
 		.then(() => {
 			func(sku_card_list.value, index)
+			getTableData()
 		})
 		.finally(() => {
 			bodyLoading.value = false
 		})
+}
+
+export function initSkuTable() {
+	const skuLabels = computed(() => {
+		return sku_card_list.value.filter((v: any) => {
+			return v.goodsSkusCardValue.length > 0
+		})
+	})
+	// 获取表头
+	const tableThs = computed(() => {
+		const length = skuLabels.value.length
+		return [
+			{
+				name: '商品规格',
+				colspan: length,
+				width: '',
+				rowspan: length > 0 ? 1 : 2
+			},
+			{
+				name: '销售价',
+				width: '100',
+				rowspan: 2
+			},
+			{
+				name: '市场价',
+				width: '100',
+				rowspan: 2
+			},
+			{
+				name: '成本价',
+				width: '100',
+				rowspan: 2
+			},
+			{
+				name: '库存',
+				width: '100',
+				rowspan: 2
+			},
+			{
+				name: '体积',
+				width: '100',
+				rowspan: 2
+			},
+			{
+				name: '重量',
+				width: '100',
+				rowspan: 2
+			},
+			{
+				name: '编码',
+				width: '100',
+				rowspan: 2
+			}
+		]
+	})
+
+	return {
+		skuLabels,
+		tableThs,
+		sku_list
+	}
+}
+
+function getTableData() {
+	setTimeout(() => {
+		if (sku_card_list.value.length === 0) return []
+
+		const list: any = []
+		sku_card_list.value.forEach((o: any) => {
+			if (o.goodsSkusCardValue && o.goodsSkusCardValue.length > 0) {
+				list.push(o.goodsSkusCardValue)
+			}
+		})
+
+		if (list.length == 0) {
+			return []
+		}
+
+		const arr = cartesianProductOf(...list)
+
+		// sku_list.value = []
+		console.log(sku_list.value)
+
+		sku_list.value = arr.map((o) => {
+			return {
+				code: '',
+				cprice: '',
+				goods_id: goodsId.value,
+				image: '',
+				oprice: '0.00',
+				pprice: '0.00',
+				skus: o,
+				stock: 0,
+				volume: 0,
+				weight: 0
+			}
+		})
+	}, 200)
 }

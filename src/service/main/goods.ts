@@ -71,3 +71,7 @@ export function updateGoodsSkusCardValue(id: any, data: any) {
 export function deleteGoodsSkusCardValue(id: any) {
 	return request.post(`/admin/goods_skus_card_value/${id}/delete`)
 }
+
+export function chooseAndSetGoodsSkusCard(id: number, data: any) {
+	return request.post(`/admin/goods_skus_card/${id}/set`, data)
+}

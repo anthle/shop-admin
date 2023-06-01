@@ -35,3 +35,18 @@ export function useArrayMoveUp(arr: Array<any>, index: number) {
 export function useArrayMoveDown(arr: Array<any>, index: number) {
 	swapIndex(arr, index, index + 1)
 }
+// sku排列算法
+export function cartesianProductOf<T>(...arrays: T[][]): T[][] {
+	return arrays.reduce(
+		(acc: T[][], curr: T[]) => {
+			const ret: T[][] = []
+			acc.forEach((a: T[]) => {
+				curr.forEach((b: T) => {
+					ret.push([...a, b])
+				})
+			})
+			return ret
+		},
+		[[]]
+	)
+}

@@ -26,7 +26,7 @@ const getData = (page: number = 1) => {
 			let item = list.value[0]
 
 			if (item) {
-				handdleListItemClick(item.id)
+				handleListItemClick(item.id)
 			}
 		})
 		.finally(() => {
@@ -111,7 +111,7 @@ const handleDelete = (itemId: number) => {
 
 // 侧边栏点击事件
 const emit = defineEmits(['change'])
-const handdleListItemClick = (id: any) => {
+const handleListItemClick = (id: any) => {
 	active.value = id
 	emit('change', id)
 }
@@ -131,7 +131,7 @@ defineExpose({
 				:active="item.id === active"
 				@edit="handleEdit(item)"
 				@close="handleDelete(item.id)"
-				@click="handdleListItemClick(item.id)"
+				@click="handleListItemClick(item.id)"
 			></asideList>
 		</div>
 		<div class="bottom">
