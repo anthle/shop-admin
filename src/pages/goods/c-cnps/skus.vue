@@ -4,7 +4,7 @@ import { readGoods, updateGoodsSkus } from '@/service/main/goods'
 import formDrawer from '@/components/formDrawer.vue'
 import skuCard from './skuCard.vue'
 import skuTable from './skuTable.vue'
-import { goodsId, initSkuCardList } from '@/composables/useSkus'
+import { goodsId, initSkuCardList, sku_list } from '@/composables/useSkus'
 
 const form = reactive({
 	sku_type: 0,
@@ -43,7 +43,15 @@ const open = (row: any) => {
 const emit = defineEmits(['reloadDate'])
 const submit = () => {
 	formDrawerRef.value?.showLoading()
-	updateGoodsSkus(goodsId.value, form)
+	let data = {
+		sku_type: form.sku_type,
+		sku_value: form.sku_value,
+		goodsSkus: null
+	}
+	if (form.sku_type == 1) {
+		data.goodsSkus = sku_list.value
+	}
+	updateGoodsSkus(goodsId.value, data)
 		.then(() => {
 			toast('设置商品规格成功')
 			formDrawerRef.value?.close()

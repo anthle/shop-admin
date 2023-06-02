@@ -263,6 +263,7 @@ export function initSkuTable() {
 	}
 }
 
+// 动态规格设置
 function getTableData() {
 	setTimeout(() => {
 		if (sku_card_list.value.length === 0) return []
@@ -281,8 +282,6 @@ function getTableData() {
 		const arr = cartesianProductOf(...list)
 
 		// sku_list.value = []
-		console.log(sku_list.value)
-
 		sku_list.value = arr.map((o) => {
 			return {
 				code: '',

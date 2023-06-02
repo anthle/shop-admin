@@ -198,7 +198,17 @@ const handleSetGoodsSkus = (row: any) => skusRef.value.open(row)
 				<template #default="{ row }">
 					<div v-if="searchForm.tab != 'delete'">
 						<el-button class="px-1" type="primary" size="small" text @click="handleUpdate(row)">修改</el-button>
-						<el-button class="px-1" type="primary" size="small" text @click="handleSetGoodsSkus(row)"
+						<el-button
+							class="px-1"
+							:type="
+								(row.sku_type == 0 && !row.sku_value) || (row.sku_type == 1 && !row.goods_skus.length)
+									? 'danger'
+									: 'primary'
+							"
+							size="small"
+							text
+							@click="handleSetGoodsSkus(row)"
+							:loading="row.skusLoading"
 							>商品规格</el-button
 						>
 						<el-button
