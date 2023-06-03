@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { getGoodsList, updateGoodsStatus, createGoods, updateGoods, deleteGoods } from '@/service/main/goods'
+import {
+	getGoodsList,
+	updateGoodsStatus,
+	createGoods,
+	updateGoods,
+	deleteGoods,
+	restoreGoods,
+	destroyGoods
+} from '@/service/main/goods'
 import { getCategoryList } from '@/service/main/category'
 import formDrawer from '@/components/formDrawer.vue'
 import chooseImage from '@/components/chooseImage.vue'
@@ -10,6 +18,7 @@ import SearchItem from '@/components/searchItem.vue'
 import banners from './c-cnps/banners.vue'
 import content from './c-cnps/content.vue'
 import skus from './c-cnps/skus.vue'
+import { toast } from '@/composables/useEle'
 
 const {
 	tableData,
@@ -23,7 +32,8 @@ const {
 	multipleTableRef,
 	handleMultiDelete,
 	handleSelectionChange,
-	handleMultiStatusChange
+	handleMultiStatusChange,
+	multiSelectionIds
 } = useInitTable({
 	searchForm: {
 		title: '',
@@ -107,6 +117,26 @@ const handleSetGoodsContent = (row: any) => contentRef.value.open(row)
 // 设置轮播图
 const skusRef = ref()
 const handleSetGoodsSkus = (row: any) => skusRef.value.open(row)
+
+// 恢复商品
+const handleRestoreGoods = () => useMultiAction(restoreGoods, '恢复')
+// 彻底删除商品
+const handleDestroyGoods = () => useMultiAction(destroyGoods, '彻底删除')
+
+type FuncType = (param: any) => Promise<any>
+function useMultiAction(func: FuncType, msg: string) {
+	loading.value = true
+	func(multiSelectionIds.value)
+		.then(() => {
+			toast(msg + '成功!')
+			if (multipleTableRef.value) {
+				multipleTableRef.value.clearSelection()
+			}
+			multipleTableRef.value!.clearSelection()
+			getData()
+		})
+		.finally(() => (loading.value = false))
+}
 </script>
 
 <template>
@@ -129,7 +159,34 @@ const handleSetGoodsSkus = (row: any) => skusRef.value.open(row)
 		</Search>
 
 		<!-- 新增 -->
-		<listHeader @create="handleCreate" @refresh="getData()" @delete="handleMultiDelete" layout="create,delete,refresh">
+		<listHeader @create="handleCreate" @refresh="getData()" layout="create,refresh">
+			<el-popconfirm
+				v-if="searchForm.tab !== 'delete'"
+				title="是否要删除该商品?"
+				confirm-button-text="确定"
+				cancel-button-text="取消"
+				width="180"
+				@confirm="handleMultiDelete"
+			>
+				<template #reference>
+					<el-button type="danger" size="default">批量删除</el-button>
+				</template>
+			</el-popconfirm>
+
+			<el-button type="warning" size="default" @click="handleRestoreGoods" v-else>批量恢复</el-button>
+			<el-popconfirm
+				v-if="searchForm.tab == 'delete'"
+				title="是否要彻底删除该商品?"
+				confirm-button-text="确定"
+				cancel-button-text="取消"
+				width="180"
+				@confirm="handleDestroyGoods"
+			>
+				<template #reference>
+					<el-button type="danger" size="default">彻底删除</el-button>
+				</template>
+			</el-popconfirm>
+
 			<el-button
 				size="default"
 				@click="handleMultiStatusChange(1)"
@@ -230,11 +287,11 @@ const handleSetGoodsSkus = (row: any) => skusRef.value.open(row)
 							>商品详情</el-button
 						>
 						<el-popconfirm
-							title="是否要删除该管理员?"
+							title="是否要删除该商品?"
 							confirm-button-text="确定"
 							cancel-button-text="取消"
 							width="180"
-							@confirm="handleDelete(row.id)"
+							@confirm="handleDelete([row.id])"
 						>
 							<template #reference>
 								<el-button class="px-1" type="primary" size="small" text>删除</el-button>

@@ -278,23 +278,49 @@ function getTableData() {
 		if (list.length == 0) {
 			return []
 		}
+		// 获取之前的规格列表,将规格id排序后转化成字符串
+		const beforeSkuList = JSON.parse(JSON.stringify(sku_list.value)).map((o: any) => {
+			if (!Array.isArray(o.skus)) {
+				o.skus = Object.keys(o.skus).map((k) => o.skus[k])
+			}
+			o.skusId = o.skus
+				.sort((a: any, b: any) => a.id - b.id)
+				.map((s: any) => s.id)
+				.join(',')
+
+			return o
+		})
 
 		const arr = cartesianProductOf(...list)
 
-		// sku_list.value = []
-		sku_list.value = arr.map((o) => {
+		sku_list.value = []
+		sku_list.value = arr.map((skus) => {
+			const o = getBeforeSkuItem(JSON.parse(JSON.stringify(skus)), beforeSkuList)
 			return {
-				code: '',
-				cprice: '',
-				goods_id: goodsId.value,
-				image: '',
-				oprice: '0.00',
-				pprice: '0.00',
-				skus: o,
-				stock: 0,
-				volume: 0,
-				weight: 0
+				code: o?.code || '',
+				cprice: o?.cprice || '',
+				goods_id: o?.goods_id,
+				image: o?.image || '',
+				oprice: o?.oprice || '0.00',
+				pprice: o?.pprice || '0.00',
+				skus,
+				stock: o?.stock || 0,
+				volume: o?.volume || 0,
+				weight: o?.weight || 0
 			}
 		})
 	}, 200)
+}
+
+function getBeforeSkuItem(skus: any, beforeSkuList: any) {
+	const skusId = skus
+		.sort((a: any, b: any) => a.id - b.id)
+		.map((s: any) => s.id)
+		.join(',')
+	return beforeSkuList.find((o: any) => {
+		if (skus.length > o.skus.length) {
+			return skusId.indexOf(o.skusId) != -1
+		}
+		return o.skusId.indexOf(skusId) != -1
+	})
 }

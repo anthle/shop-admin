@@ -42,7 +42,7 @@ export function useInitTable(option: Option = {} as Option) {
 
 	//  删除管理员
 
-	const handleDelete = (id: number) => {
+	const handleDelete = (id: number | number[]) => {
 		option.delete!(id).then(() => {
 			toast('删除成功')
 			getData(1)
@@ -120,7 +120,8 @@ export function useInitTable(option: Option = {} as Option) {
 		handleSelectionChange,
 		multipleTableRef,
 		handleMultiDelete,
-		handleMultiStatusChange
+		handleMultiStatusChange,
+		multiSelectionIds
 	}
 }
 
