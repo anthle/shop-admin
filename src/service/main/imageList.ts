@@ -28,4 +28,4 @@ export function deleteImage(ids: any) {
 	return request.post('/admin/image/delete_all', { ids })
 }
 
-export const uploadImgAction = '/api/admin/image/upload'
+export const uploadImgAction = import.meta.env.VITE_APP_BASE_API + '/admin/image/upload'

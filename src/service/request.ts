@@ -5,7 +5,7 @@ import { hideFullLoading, showFullLoading } from '@/composables/utils'
 import { useLoginStore } from '@/stores/login'
 
 const instance = axios.create({
-	baseURL: '/api',
+	baseURL: import.meta.env.VITE_APP_BASE_API,
 	withCredentials: true
 })
 
