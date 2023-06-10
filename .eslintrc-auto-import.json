@@ -4,6 +4,8 @@
     "ComponentPublicInstance": true,
     "ComputedRef": true,
     "EffectScope": true,
+    "ElMessageBox": true,
+    "ElNotification": true,
     "InjectionKey": true,
     "PropType": true,
     "Ref": true,

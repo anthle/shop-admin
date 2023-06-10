@@ -1,6 +1,4 @@
-<script setup lang="ts">
-console.log(import.meta.env)
-</script>
+<script setup lang="ts"></script>
 
 <template>
 	<div class="app">

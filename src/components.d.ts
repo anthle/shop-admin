@@ -10,6 +10,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AsideList: typeof import('./components/asideList.vue')['default']
+    ChooseGoods: typeof import('./components/chooseGoods.vue')['default']
     ChooseImage: typeof import('./components/chooseImage.vue')['default']
     ChooseSku: typeof import('./components/chooseSku.vue')['default']
     copy: typeof import('./components/imageAside copy.vue')['default']
@@ -40,6 +41,7 @@ declare module '@vue/runtime-core' {
     ElHeader: typeof import('element-plus/es')['ElHeader']
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElImage: typeof import('element-plus/es')['ElImage']
+    ElImg: typeof import('element-plus/es')['ElImg']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElInputNumber: typeof import('element-plus/es')['ElInputNumber']
     ElMain: typeof import('element-plus/es')['ElMain']
