@@ -40,8 +40,19 @@ const handleDelete = (row: any) => {
 
 const chooseGoodsRef = ref<InstanceType<typeof chooseGoods>>()
 const handleConnect = () => {
-	chooseGoodsRef.value?.open((goods_id: any) => {
-		console.log(goods_id)
+	chooseGoodsRef.value?.open((goods_ids: any) => {
+		formDrawerRef.value?.showLoading()
+		connectCategoryGoods({
+			category_id: category_id.value,
+			goods_ids
+		})
+			.then(() => {
+				toast('关联成功!')
+				getData()
+			})
+			.finally(() => {
+				formDrawerRef.value?.hideLoading()
+			})
 	})
 }
 

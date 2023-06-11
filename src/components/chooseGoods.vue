@@ -32,7 +32,7 @@ const close = () => {
 }
 
 const callbackFunction = ref()
-const open = (callback = null) => {
+const open = (callback: any = null) => {
 	callbackFunction.value = callback
 	dialogVisible.value = true
 }
@@ -97,8 +97,8 @@ defineExpose({ open })
 		</div>
 		<template #footer>
 			<span>
-				<el-button type="primary" @click="submit()">确认</el-button>
 				<el-button @click="close()">取消</el-button>
+				<el-button type="primary" @click="submit()">确认</el-button>
 			</span>
 		</template>
 	</el-dialog>

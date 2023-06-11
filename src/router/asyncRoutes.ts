@@ -110,5 +110,13 @@ export const asyncRoutes = [
 		meta: {
 			title: '规格管理'
 		}
+	},
+	{
+		path: '/level/list',
+		name: 'Level',
+		component: () => import('../pages/level/list.vue'),
+		meta: {
+			title: '会员等级'
+		}
 	}
 ]
