@@ -21,7 +21,7 @@ const handleFoldChange = (flag: boolean) => {
 				<el-aside :width="isFold ? '64px' : '250px'">
 					<layoutMenu :is-fold="isFold"></layoutMenu>
 				</el-aside>
-				<el-main>
+				<el-main class="bg-gray-100">
 					<layoutContent :is-fold="isFold"></layoutContent>
 				</el-main>
 			</el-container>
