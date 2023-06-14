@@ -63,7 +63,7 @@ const review = (row: any) => {
 		</Search>
 
 		<!-- 表格 -->
-		<el-table default-expand-all :data="tableData" stripe style="width: 100%" table-layout="fixed" v-loading="loading">
+		<el-table :data="tableData" stripe style="width: 100%" table-layout="fixed" v-loading="loading" row-key="id">
 			<el-table-column type="expand">
 				<template #default="{ row }">
 					<div class="flex pl-16">
@@ -72,7 +72,11 @@ const review = (row: any) => {
 							<h6 class="flex items-center">
 								{{ row.user.nickname || row.user.username }}
 								<small class="text-gray-400 ml-2">{{ row.review_time }}</small>
-								<el-button size="small" class="ml-auto" @click="openTextare(row)" v-if="!row.textareaEdit && !row.extra"
+								<el-button
+									size="small"
+									class="ml-auto"
+									@click="openTextare($event, row)"
+									v-if="!row.textareaEdit && !row.extra"
 									>回复</el-button
 								>
 							</h6>
@@ -92,7 +96,7 @@ const review = (row: any) => {
 							<div v-if="row.textareaEdit">
 								<el-input v-model="textarea" placeholder="请输入评价内容" type="textarea" :row="2"></el-input>
 								<div class="py-2">
-									<el-button type="primary" size="small" @click="review(row)">回复</el-button>
+									<el-button type="primary" size="small" @click.stop="review(row)">回复</el-button>
 									<el-button size="small" class="ml-2" @click="row.textareaEdit = false">取消</el-button>
 								</div>
 							</div>
