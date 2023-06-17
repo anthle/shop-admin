@@ -8,7 +8,7 @@ const props = defineProps({
 
 const btns = computed(() => props.layout.split(','))
 
-defineEmits(['create', 'refresh', 'delete'])
+defineEmits(['create', 'refresh', 'delete', 'download'])
 </script>
 
 <template>
@@ -30,12 +30,21 @@ defineEmits(['create', 'refresh', 'delete'])
 			</el-popconfirm>
 			<slot />
 		</div>
-		<el-tooltip class="box-item" effect="dark" content="刷新数据" placement="top">
-			<el-button text @click="$emit('refresh')">
-				<el-icon :size="20">
-					<Refresh />
-				</el-icon>
-			</el-button>
-		</el-tooltip>
+		<div>
+			<el-tooltip class="box-item" effect="dark" content="刷新数据" placement="top">
+				<el-button text @click="$emit('refresh')">
+					<el-icon :size="18">
+						<Refresh />
+					</el-icon>
+				</el-button>
+			</el-tooltip>
+			<el-tooltip v-if="layout.includes('download')" class="box-item" effect="dark" content="导出数据" placement="top">
+				<el-button text @click="$emit('download')">
+					<el-icon :size="18">
+						<Download />
+					</el-icon>
+				</el-button>
+			</el-tooltip>
+		</div>
 	</div>
 </template>

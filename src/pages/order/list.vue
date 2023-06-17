@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { getOrderList, deleteOrder } from '@/service/main/order'
-import { useInitTable, useInitForm } from '@/composables/useCommon'
+import { useInitTable } from '@/composables/useCommon'
 import listHeader from '@/components/listHeader.vue'
 import Search from '@/components/search.vue'
 import SearchItem from '@/components/searchItem.vue'
+import exportExcel from './c-cnps/exportExcel.vue'
 
 const {
 	tableData,
@@ -72,6 +73,12 @@ const tabbars = [
 		name: 'finish'
 	}
 ]
+
+const exportExcelRef = ref<InstanceType<typeof exportExcel>>()
+
+const openDownload = () => {
+	exportExcelRef.value?.open()
+}
 </script>
 
 <template>
@@ -113,7 +120,7 @@ const tabbars = [
 		</Search>
 
 		<!-- 新增 -->
-		<listHeader layout="">
+		<listHeader layout="download" @refresh="getData" @download="openDownload">
 			<el-popconfirm
 				title="是否要删除该商品?"
 				confirm-button-text="确定"
@@ -220,6 +227,8 @@ const tabbars = [
 			/>
 		</div>
 	</el-card>
+
+	<exportExcel ref="exportExcelRef" :tab="tabbars"></exportExcel>
 </template>
 
 <style lang="less" scoped></style>
