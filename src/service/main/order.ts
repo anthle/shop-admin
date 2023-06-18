@@ -11,3 +11,14 @@ export function deleteOrder(ids: number | number[]) {
 		ids
 	})
 }
+
+export function exportOrder(query: any = {}) {
+	const r = queryParams(query)
+	return request.post(
+		`/admin/order/excelexport${r}`,
+		{},
+		{
+			responseType: 'blob'
+		}
+	)
+}

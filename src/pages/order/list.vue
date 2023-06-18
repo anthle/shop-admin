@@ -5,6 +5,7 @@ import listHeader from '@/components/listHeader.vue'
 import Search from '@/components/search.vue'
 import SearchItem from '@/components/searchItem.vue'
 import exportExcel from './c-cnps/exportExcel.vue'
+import infoModal from './c-cnps/infoModal.vue'
 
 const {
 	tableData,
@@ -14,7 +15,6 @@ const {
 	currentPage,
 	resetSearchForm,
 	getData,
-	handleDelete,
 	multipleTableRef,
 	handleMultiDelete,
 	handleSelectionChange
@@ -78,6 +78,26 @@ const exportExcelRef = ref<InstanceType<typeof exportExcel>>()
 
 const openDownload = () => {
 	exportExcelRef.value?.open()
+}
+
+const infoModalRef = ref<InstanceType<typeof infoModal>>()
+
+const info = ref(null)
+const openInfoModal = (row: any) => {
+	row.order_items = row.order_items.map((o: any) => {
+		if (o.skus_type === 1 && o.goods_skus) {
+			let s = []
+			for (const k in o.goods_skus.skus) {
+				s.push(o.goods_skus.skus[k].value)
+			}
+			o.sku = s.join(',')
+		}
+		return o
+	})
+	info.value = row
+	console.log(info.value)
+
+	infoModalRef.value?.open()
 }
 </script>
 
@@ -200,9 +220,9 @@ const openDownload = () => {
 				</template>
 			</el-table-column>
 			<el-table-column label="操作" align="center">
-				<template>
+				<template #default="{ row }">
 					<div v-if="searchForm.tab != 'delete'">
-						<el-button class="px-1" type="primary" size="small" text>商品详情</el-button>
+						<el-button class="px-1" type="primary" size="small" text @click="openInfoModal(row)">商品详情</el-button>
 						<el-button v-if="searchForm.tab === 'noship'" class="px-1" type="primary" size="small" text
 							>订单发货</el-button
 						>
@@ -228,7 +248,8 @@ const openDownload = () => {
 		</div>
 	</el-card>
 
-	<exportExcel ref="exportExcelRef" :tab="tabbars"></exportExcel>
+	<exportExcel ref="exportExcelRef" :tabs="tabbars"></exportExcel>
+	<infoModal ref="infoModalRef" :info="info"></infoModal>
 </template>
 
 <style lang="less" scoped></style>

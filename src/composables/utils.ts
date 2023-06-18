@@ -50,3 +50,16 @@ export function cartesianProductOf<T>(...arrays: T[][]): T[][] {
 		[[]]
 	)
 }
+
+// 导出表格
+
+export function downloadExcelFile(data: any) {
+	const url = window.URL.createObjectURL(new Blob([data]))
+	const link = document.createElement('a')
+	link.style.display = 'none'
+	link.href = url
+	const filename = new Date().getTime() + '.xlsx'
+	link.setAttribute('download', filename)
+	document.body.appendChild(link)
+	link.click()
+}
