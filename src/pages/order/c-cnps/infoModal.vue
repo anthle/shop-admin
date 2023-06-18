@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useDateFormat } from '@vueuse/core'
+import ShipInfoModal from './shipInfoModal.vue'
 
 interface Props {
 	info: any
@@ -27,8 +28,17 @@ const refund_status = computed(() => {
 		success: '退款成功',
 		failed: '退款失败'
 	}
-	// return props.info.refund_status ? opt[props.info.refund_status] : []
+	return props.info.refund_status ? opt[props.info.refund_status as keyof typeof opt] : []
 })
+
+const ShipInfoModalRef = ref<InstanceType<typeof ShipInfoModal>>()
+const loading = ref(false)
+const openShipInfoModal = (id: number) => {
+	loading.value = true
+	ShipInfoModalRef.value?.open(id).finally(() => {
+		loading.value = false
+	})
+}
 
 defineExpose({
 	open
@@ -36,7 +46,7 @@ defineExpose({
 </script>
 
 <template>
-	<el-drawer title="订单详情" v-model="dialogVisible" direction="rtl" size="30%">
+	<el-drawer title="订单详情" v-model="dialogVisible" direction="rtl" size="40%">
 		<el-card shadow="never" class="mb-3">
 			<template #header>
 				<b class="text-sm">订单详情</b>
@@ -55,7 +65,18 @@ defineExpose({
 			</template>
 			<el-form label-width="80px">
 				<el-form-item label="物流公司">{{ info.ship_data.express_company }} </el-form-item>
-				<el-form-item label="运单号">{{ info.ship_data.express_no }} </el-form-item>
+				<el-form-item label="运单号">
+					{{ info.ship_data.express_no }}
+					<el-button
+						type="primary"
+						text
+						size="small"
+						@click="openShipInfoModal(info.id)"
+						class="ml-3"
+						:loading="loading"
+						>查看物流</el-button
+					>
+				</el-form-item>
 				<el-form-item label="发货时间">{{ ship_time }} </el-form-item>
 			</el-form>
 		</el-card>
@@ -89,7 +110,7 @@ defineExpose({
 			</el-form>
 		</el-card>
 
-		<el-card shadow="never" v-if="info.address">
+		<el-card shadow="never" v-if="info.address" class="mb-3">
 			<template #header>
 				<b class="text-sm">收货信息</b>
 			</template>
@@ -102,18 +123,16 @@ defineExpose({
 			</el-form>
 		</el-card>
 
-		<el-card shadow="never" v-if="info.refund_status !== 'pending'">
+		<el-card shadow="never" v-if="info.refund_status !== 'pending'" class="mb-3">
 			<template #header>
 				<b class="text-sm">退款信息</b>
-				<el-button text disabled></el-button>
+				<el-button text disabled style="float: right">{{ refund_status }}</el-button>
 			</template>
 			<el-form label-width="80px">
-				<el-form-item label="收款人">{{ info.address.name }} </el-form-item>
-				<el-form-item label="联系方式">{{ info.address.phone }} </el-form-item>
-				<el-form-item label="联系地址"
-					>{{ info.address.province + info.address.city + info.address.district + info.address.address }}
-				</el-form-item>
+				<el-form-item label="退款理由">{{ info.extra.refund_reason }} </el-form-item>
 			</el-form>
 		</el-card>
 	</el-drawer>
+
+	<ShipInfoModal ref="ShipInfoModalRef"></ShipInfoModal>
 </template>

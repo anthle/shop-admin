@@ -43,7 +43,7 @@ export function showModal(content = '提示内容', type: eleInfoType = 'warning
  * @param tip 提示内容
  * @param value 输入框默认值
  */
-export function showPrompt(tip: string, value: any) {
+export function showPrompt(tip: string, value?: any) {
 	return ElMessageBox.prompt(tip, '', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',

@@ -22,3 +22,11 @@ export function exportOrder(query: any = {}) {
 		}
 	)
 }
+
+export function getShipInfo(id: number | number[]) {
+	return request.get(`/admin/order/${id}/get_ship_info`)
+}
+
+export function refundOrder(id: number | number[], data: { agree: number; disagree_reason?: string }) {
+	return request.post(`/admin/order/${id}/handle_refund`, data)
+}
