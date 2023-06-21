@@ -64,6 +64,22 @@ export const asyncRoutes = [
 		}
 	},
 	{
+		path: '/setting/buy',
+		name: 'Buy',
+		component: () => import('../pages/setting/buy.vue'),
+		meta: {
+			title: '支付设置'
+		}
+	},
+	{
+		path: '/setting/ship',
+		name: 'Ship',
+		component: () => import('../pages/setting/ship.vue'),
+		meta: {
+			title: '物流设置'
+		}
+	},
+	{
 		path: '/coupon/list',
 		name: 'Coupon',
 		component: () => import('../pages/coupon/list.vue'),

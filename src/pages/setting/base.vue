@@ -1,27 +1,9 @@
 <script setup lang="ts">
 import { toast } from '@/composables/useEle'
 import { getSysConfig, setSysConfig } from '@/service/main/sysconfig'
+import type { BaseForm } from './types'
 
-interface Form {
-	open_reg: number
-	reg_method: string
-	password_min: number
-	password_encrypt: number[]
-	upload_method: string
-	upload_config: {
-		Bucket: string
-		ACCESS_KEY: string
-		SECRET_KEY: string
-		http: string
-	}
-	api_safe: number
-	api_secret: string
-	close_order_minute: number
-	auto_received_day: number
-	after_sale_day: number
-}
-
-const form: Form = reactive({
+const form: BaseForm = reactive({
 	open_reg: 1, //开启注册，0关闭1开启
 	reg_method: 'username', //注册方式，username普通phone手机
 	password_min: 7, //密码最小长度

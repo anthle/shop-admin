@@ -7,3 +7,5 @@ export function getSysConfig() {
 export function setSysConfig(data: any) {
 	return request.post('/admin/sysconfig', data)
 }
+
+export const uploadAction = '/api/admin/sysconfig/upload'
