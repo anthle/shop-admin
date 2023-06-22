@@ -119,7 +119,7 @@ const handleRefund = (id: number, agree: number) => {
 	</el-tabs>
 	<!-- 搜索 -->
 	<el-card shadow="never" class="border-0">
-		<Search :model="searchForm" @search="getData()" @reset="resetSearchForm">
+		<Search :model="searchForm" :length="5" @search="getData()" @reset="resetSearchForm">
 			<SearchItem label="订单编号">
 				<el-input v-model="searchForm.no" placeholder="订单编号" clearable @keydown.enter="getData()"></el-input>
 			</SearchItem>

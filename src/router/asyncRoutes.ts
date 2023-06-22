@@ -134,5 +134,21 @@ export const asyncRoutes = [
 		meta: {
 			title: '会员等级'
 		}
+	},
+	{
+		path: '/distribution/index',
+		name: 'Distribution',
+		component: () => import('../pages/distribution/index.vue'),
+		meta: {
+			title: '分销员管理'
+		}
+	},
+	{
+		path: '/distribution/setting',
+		name: 'DistributionSetting',
+		component: () => import('../pages/distribution/setting.vue'),
+		meta: {
+			title: '分销设置'
+		}
 	}
 ]

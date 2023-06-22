@@ -7,8 +7,6 @@ import listHeader from '@/components/listHeader.vue'
 import Search from '@/components/search.vue'
 import SearchItem from '@/components/searchItem.vue'
 
-const roles = ref([] as any[])
-
 const user_level = ref([] as any[])
 
 const {
@@ -61,7 +59,7 @@ const { form, rules, formRef, formDrawerRef, handleSubmit, handleCreate, handleU
 <template>
 	<!-- 搜索 -->
 	<el-card shadow="never" class="border-0">
-		<Search :model="searchForm" @search="getData()" @reset="resetSearchForm">
+		<Search :model="searchForm" :length="2" @search="getData()" @reset="resetSearchForm">
 			<SearchItem label="关键词">
 				<el-input
 					v-model="searchForm.keyword"

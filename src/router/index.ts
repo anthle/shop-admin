@@ -42,6 +42,7 @@ export function mapMenusToRoutes(userMenus: any) {
 			}
 		})
 	}
+
 	findAndAddRoutesByMenus(userMenus)
 }
 

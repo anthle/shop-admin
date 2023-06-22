@@ -145,7 +145,7 @@ function useMultiAction(func: FuncType, msg: string) {
 	</el-tabs>
 	<!-- 搜索 -->
 	<el-card shadow="never" class="border-0">
-		<Search :model="searchForm" @search="getData()" @reset="resetSearchForm">
+		<Search :model="searchForm" :length="2" @search="getData()" @reset="resetSearchForm">
 			<SearchItem label="关键词">
 				<el-input v-model="searchForm.title" placeholder="商品名称" clearable @keydown.enter="getData()"></el-input>
 			</SearchItem>

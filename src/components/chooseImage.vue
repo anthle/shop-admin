@@ -32,7 +32,7 @@ const handleUploadImg = () => {
 interface Props {
 	modelValue?: any
 	limit?: any
-	preview: boolean
+	preview?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {

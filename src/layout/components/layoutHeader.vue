@@ -177,7 +177,7 @@ const handleMenuChangeClick = () => {
 </template>
 
 <style lang="less" scoped>
-:global(.el-dropdown-menu__item) {
+:deep(.el-dropdown-menu__item) {
 	line-height: 36px;
 	padding: 6px 22px;
 	font-weight: 600;

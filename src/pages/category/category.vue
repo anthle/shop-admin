@@ -96,7 +96,7 @@ const openGoodsDrawer = (data: any) => {
 </template>
 
 <style lang="less" scoped>
-:global(.el-tree-node__content) {
+:deep(.el-tree-node__content) {
 	padding: 7px 0;
 }
 </style>
