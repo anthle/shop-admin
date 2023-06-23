@@ -7,7 +7,7 @@ import { getToken } from '@/composables/auth'
 import type { UploadFile, UploadFiles } from 'element-plus'
 const token = getToken()
 
-const form: BuyForm = reactive({
+const form: Partial<BuyForm> = reactive({
 	close_order_minute: 30,
 	auto_received_day: 7,
 	after_sale_day: 23,
@@ -51,7 +51,7 @@ function getData() {
 	getSysConfig()
 		.then((res) => {
 			for (const k in form) {
-				;(form as any)[k] = (res.data.data as any)[k]
+				form[k as keyof BuyForm] = res.data.data[k as keyof BuyForm]
 			}
 		})
 		.finally(() => (loading.value = false))
@@ -77,10 +77,10 @@ const open = (key: string) => {
 }
 
 const uploadClientSuccess = (response: any, uploadFile: UploadFile, uploadFiles: UploadFiles) => {
-	form.wxpay.cert_client = response.data
+	form.wxpay!.cert_client = response.data
 }
 const uploadKeySuccess = (response: any, uploadFile: UploadFile, uploadFiles: UploadFiles) => {
-	form.wxpay.cert_key = response.data
+	form.wxpay!.cert_key = response.data
 }
 </script>
 
@@ -150,11 +150,11 @@ const uploadKeySuccess = (response: any, uploadFile: UploadFile, uploadFiles: Up
 		<formDrawer title="配置" @submit="submit" ref="formDrawerRef" size="40%">
 			<el-form v-if="drawerType === 'alipay'" :model="form" label-width="80px">
 				<el-form-item label="app_id">
-					<el-input v-model="form.alipay.app_id" style="width: 90%" placeholder="app_id"></el-input>
+					<el-input v-model="form.alipay!.app_id" style="width: 90%" placeholder="app_id"></el-input>
 				</el-form-item>
 				<el-form-item label="公钥">
 					<el-input
-						v-model="form.alipay.ali_public_key"
+						v-model="form.alipay!.ali_public_key"
 						style="width: 90%"
 						placeholder="ali_public_key"
 						type="textarea"
@@ -163,7 +163,7 @@ const uploadKeySuccess = (response: any, uploadFile: UploadFile, uploadFiles: Up
 				</el-form-item>
 				<el-form-item label="私钥">
 					<el-input
-						v-model="form.alipay.private_key"
+						v-model="form.alipay!.private_key"
 						style="width: 90%"
 						placeholder="private_key"
 						type="textarea"
@@ -174,22 +174,22 @@ const uploadKeySuccess = (response: any, uploadFile: UploadFile, uploadFiles: Up
 
 			<el-form v-else :model="form" label-width="120px">
 				<el-form-item label="公众号 APPID">
-					<el-input v-model="form.wxpay.app_id" style="width: 90%" placeholder="app_id"></el-input>
+					<el-input v-model="form.wxpay!.app_id" style="width: 90%" placeholder="app_id"></el-input>
 				</el-form-item>
 				<el-form-item label="小程序 APPID">
-					<el-input v-model="form.wxpay.miniapp_id" style="width: 90%" placeholder="miniapp_id"></el-input>
+					<el-input v-model="form.wxpay!.miniapp_id" style="width: 90%" placeholder="miniapp_id"></el-input>
 				</el-form-item>
 				<el-form-item label="小程序 secret">
-					<el-input v-model="form.wxpay.secret" style="width: 90%" placeholder="secret"></el-input>
+					<el-input v-model="form.wxpay!.secret" style="width: 90%" placeholder="secret"></el-input>
 				</el-form-item>
 				<el-form-item label="appid">
-					<el-input v-model="form.wxpay.appid" style="width: 90%" placeholder="appid"></el-input>
+					<el-input v-model="form.wxpay!.appid" style="width: 90%" placeholder="appid"></el-input>
 				</el-form-item>
 				<el-form-item label="商户号">
-					<el-input v-model="form.wxpay.mch_id" style="width: 90%" placeholder="mch_id"></el-input>
+					<el-input v-model="form.wxpay!.mch_id" style="width: 90%" placeholder="mch_id"></el-input>
 				</el-form-item>
 				<el-form-item label="API 密钥">
-					<el-input v-model="form.wxpay.key" style="width: 90%" placeholder="key"></el-input>
+					<el-input v-model="form.wxpay!.key" style="width: 90%" placeholder="key"></el-input>
 				</el-form-item>
 				<el-form-item label="cert_client">
 					<el-upload
@@ -202,7 +202,7 @@ const uploadKeySuccess = (response: any, uploadFile: UploadFile, uploadFiles: Up
 						<el-button type="primary" size="small">点击上传</el-button>
 						<template #tip>
 							<div class="text-rose-500">
-								{{ form.wxpay.cert_client ? form.wxpay.cert_client : '还未配置' }}
+								{{ form.wxpay!.cert_client ? form.wxpay!.cert_client : '还未配置' }}
 							</div>
 							<small class="text-gray-500">例如：apiclient_cert.pem</small>
 						</template>
@@ -219,7 +219,7 @@ const uploadKeySuccess = (response: any, uploadFile: UploadFile, uploadFiles: Up
 						<el-button type="primary" size="small">点击上传</el-button>
 						<template #tip>
 							<div class="text-rose-500">
-								{{ form.wxpay.cert_key ? form.wxpay.cert_key : '还未配置' }}
+								{{ form.wxpay!.cert_key ? form.wxpay!.cert_key : '还未配置' }}
 							</div>
 							<small class="text-gray-500">apiclient_key.pem</small>
 						</template>

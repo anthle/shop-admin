@@ -3,7 +3,7 @@ import { toast } from '@/composables/useEle'
 import { getSysConfig, setSysConfig } from '@/service/main/sysconfig'
 import type { BaseForm } from './types'
 
-const form: BaseForm = reactive({
+const form: Partial<BaseForm> = reactive({
 	open_reg: 1, //开启注册，0关闭1开启
 	reg_method: 'username', //注册方式，username普通phone手机
 	password_min: 7, //密码最小长度
@@ -30,7 +30,7 @@ function getData() {
 	getSysConfig()
 		.then((res) => {
 			for (const k in form) {
-				;(form as any)[k] = (res.data.data as any)[k]
+				form[k as keyof BaseForm] = res.data.data[k as keyof BaseForm]
 			}
 			form.password_encrypt = res.data.data.password_encrypt.split(',')
 		})
@@ -40,7 +40,7 @@ getData()
 
 const submit = () => {
 	loading.value = true
-	setSysConfig({ ...form, password_encrypt: form.password_encrypt.join(',') })
+	setSysConfig({ ...form, password_encrypt: form.password_encrypt!.join(',') })
 		.then(() => {
 			toast('修改成功')
 			getData()
@@ -95,11 +95,11 @@ const submit = () => {
 					</el-form-item>
 
 					<el-form-item label="Bucket">
-						<el-input v-model="form.upload_config.Bucket" placeholder="Bucket" style="width: 30%"></el-input>
+						<el-input v-model="form.upload_config!.Bucket" placeholder="Bucket" style="width: 30%"></el-input>
 					</el-form-item>
 					<el-form-item label="ACCESS_KEY">
 						<el-input
-							v-model="form.upload_config.ACCESS_KEY"
+							v-model="form.upload_config!.ACCESS_KEY"
 							placeholder="ACCESS_KEY"
 							style="width: 30%"
 							type="passward"
@@ -107,7 +107,7 @@ const submit = () => {
 					</el-form-item>
 					<el-form-item label="SECRET_KEY">
 						<el-input
-							v-model="form.upload_config.SECRET_KEY"
+							v-model="form.upload_config!.SECRET_KEY"
 							placeholder="SECRET_KEY"
 							style="width: 30%"
 							type="passward"
@@ -115,7 +115,7 @@ const submit = () => {
 					</el-form-item>
 
 					<el-form-item label="空间域名">
-						<el-input v-model="form.upload_config.http" placeholder="空间域名" style="width: 30%"></el-input>
+						<el-input v-model="form.upload_config!.http" placeholder="空间域名" style="width: 30%"></el-input>
 						<small class="text-gray-500 mt-1 flex"> 请补全http:// 或 https:// </small>
 					</el-form-item>
 				</el-tab-pane>

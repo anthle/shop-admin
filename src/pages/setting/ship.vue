@@ -2,30 +2,10 @@
 import { toast } from '@/composables/useEle'
 import { getSysConfig, setSysConfig } from '@/service/main/sysconfig'
 import type { ShipForm } from './types'
-import { getToken } from '@/composables/auth'
-import type { UploadFile, UploadFiles } from 'element-plus'
-const token = getToken()
 
 const form: ShipForm = reactive({
 	ship: '****已配置****'
 })
-
-const tableDate = [
-	{
-		name: '支付宝支付',
-		desc: '该系统支持即时到账接口',
-		src: '/public/alipay.png',
-		key: 'alipay'
-	},
-	{
-		name: '微信支付',
-		desc: '该系统支持微信网页支付和扫码支付',
-		src: '/public/wepay.png',
-		key: 'wepay'
-	}
-]
-
-const activeName = ref('first')
 
 const loading = ref(false)
 function getData() {
@@ -33,7 +13,7 @@ function getData() {
 	getSysConfig()
 		.then((res) => {
 			for (const k in form) {
-				;(form as any)[k] = (res.data.data as any)[k]
+				form[k] = res.data.data[k]
 			}
 		})
 		.finally(() => (loading.value = false))

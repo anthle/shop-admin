@@ -40,4 +40,5 @@ export interface BuyForm {
 
 export interface ShipForm {
 	ship: string
+	[key: string]: string
 }

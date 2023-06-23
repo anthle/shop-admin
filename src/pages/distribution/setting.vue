@@ -72,8 +72,9 @@ import { ref, reactive } from 'vue'
 import { getConfig, setConfig } from '@/service/main/distribution'
 import chooseImage from '@/components/chooseImage.vue'
 import { toast } from '@/composables/useEle'
+import type { Form } from './types'
 
-const form = reactive({
+const form: Partial<Form> = reactive({
 	distribution_open: 1, //分销启用:0禁用1启用
 	store_first_rebate: 10, //一级返佣比例：0~100
 	store_second_rebate: 20, //二级返佣比例：0~100
@@ -89,7 +90,7 @@ function getData() {
 	getConfig()
 		.then((res) => {
 			for (const k in form) {
-				;(form as any)[k] = (res.data.data as any)[k]
+				form[k as keyof Form] = res.data.data[k as keyof Form]
 			}
 		})
 		.finally(() => {
